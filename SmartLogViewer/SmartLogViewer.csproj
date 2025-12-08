@@ -12,4 +12,11 @@
     <ProjectReference Include="..\SmartLogViewer.Common\SmartLogViewer.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ByteParser\" />
+    <Folder Include="Core\" />
+    <Folder Include="Views\" />
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>

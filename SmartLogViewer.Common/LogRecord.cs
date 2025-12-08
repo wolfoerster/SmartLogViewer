@@ -22,7 +22,7 @@ namespace SmartLogViewer.Common;
 
 public class LogRecord
 {
-    DateTime TimeStamp { get; set; }
+    DateTimeOffset TimeStamp { get; set; }
 
     LogLevel LogLevel { get; set; }
 
