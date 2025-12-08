@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36717.8 d17.14
+VisualStudioVersion = 17.14.36717.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLogViewer", "SmartLogViewer\SmartLogViewer.csproj", "{ED51D791-C70F-4DCA-B3E9-27BCEE8F5233}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLogViewer.Common", "SmartLogViewer.Common\SmartLogViewer.Common.csproj", "{F6379077-431D-43A4-9086-8D2DF464706F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{ED51D791-C70F-4DCA-B3E9-27BCEE8F5233}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED51D791-C70F-4DCA-B3E9-27BCEE8F5233}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED51D791-C70F-4DCA-B3E9-27BCEE8F5233}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6379077-431D-43A4-9086-8D2DF464706F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6379077-431D-43A4-9086-8D2DF464706F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6379077-431D-43A4-9086-8D2DF464706F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6379077-431D-43A4-9086-8D2DF464706F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

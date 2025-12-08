@@ -8,4 +8,8 @@
     <AssemblyVersion>0.1.0</AssemblyVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SmartLogViewer.Common\SmartLogViewer.Common.csproj" />
+  </ItemGroup>
+
 </Project>

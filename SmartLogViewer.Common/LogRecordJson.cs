@@ -15,22 +15,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Windows;
-using System.Windows.Input;
+using Newtonsoft.Json.Linq;
 
-namespace SmartLogViewer;
+namespace SmartLogViewer.Common;
 
-public partial class MainWindow : Window
+public class LogRecordJson : LogRecord
 {
-    public MainWindow()
-    {
-        InitializeComponent();
-    }
-
-    protected override void OnKeyDown(KeyEventArgs e)
-    {
-        base.OnKeyDown(e);
-        if (e.Key == Key.Escape)
-            Close();
-    }
+    public JObject Json { get; set; } = [];
 }

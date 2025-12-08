@@ -1,5 +1,5 @@
 ﻿//******************************************************************************************
-// Copyright © 2017 - 2025 Wolfgang Foerster (wolfoerster@gmx.de)
+// Copyright © 2017 - 2026 Wolfgang Foerster (wolfoerster@gmx.de)
 //
 // This file is part of the SmartLogViewer project which can be found on github.com
 //

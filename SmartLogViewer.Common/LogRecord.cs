@@ -15,22 +15,20 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Windows;
-using System.Windows.Input;
+using System;
+using System.Collections.Generic;
 
-namespace SmartLogViewer;
+namespace SmartLogViewer.Common;
 
-public partial class MainWindow : Window
+public class LogRecord
 {
-    public MainWindow()
-    {
-        InitializeComponent();
-    }
+    DateTime TimeStamp { get; set; }
 
-    protected override void OnKeyDown(KeyEventArgs e)
-    {
-        base.OnKeyDown(e);
-        if (e.Key == Key.Escape)
-            Close();
-    }
+    LogLevel LogLevel { get; set; }
+
+    public string LogContext { get; set; } = "";
+
+    public string LogMessage { get; set; } = "";
+
+    Dictionary<string, string> Annex { get; } = [];
 }

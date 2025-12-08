@@ -15,22 +15,21 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Windows;
-using System.Windows.Input;
+namespace SmartLogViewer.Common;
 
-namespace SmartLogViewer;
-
-public partial class MainWindow : Window
+public enum LogLevel
 {
-    public MainWindow()
-    {
-        InitializeComponent();
-    }
+    Verbose,
 
-    protected override void OnKeyDown(KeyEventArgs e)
-    {
-        base.OnKeyDown(e);
-        if (e.Key == Key.Escape)
-            Close();
-    }
+    Debug,
+
+    Information,
+
+    Warning,
+
+    Error,
+
+    Fatal,
+
+    None,
 }
