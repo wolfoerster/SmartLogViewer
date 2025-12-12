@@ -16,7 +16,6 @@
     <Folder Include="ByteParser\" />
     <Folder Include="Core\" />
     <Folder Include="Views\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>
