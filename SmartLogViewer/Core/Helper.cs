@@ -15,27 +15,20 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Windows;
-using System.Windows.Input;
-using SmartLogViewer.ViewModels;
+using System;
+using System.IO;
 
-namespace SmartLogViewer;
+namespace SmartLogViewer.Core;
 
-public partial class MainWindow : Window
+internal static class Helper
 {
-    private readonly MainViewModel viewModel;
-    private readonly string viewModelFile = "MainViewModel.json";
-
-    public MainWindow()
+    public static string GetUserFile(string fileName)
     {
-        InitializeComponent();
-        viewModel = new MainViewModel();
-    }
+        var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SmartLogViewer");
 
-    protected override void OnKeyDown(KeyEventArgs e)
-    {
-        base.OnKeyDown(e);
-        if (e.Key == Key.Escape)
-            Close();
+        if (!Directory.Exists(dir))
+            Directory.CreateDirectory(dir);
+
+        return Path.Combine(dir, fileName);
     }
 }

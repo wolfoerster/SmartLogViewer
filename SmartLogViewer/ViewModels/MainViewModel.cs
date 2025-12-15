@@ -15,27 +15,19 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Windows;
-using System.Windows.Input;
-using SmartLogViewer.ViewModels;
+namespace SmartLogViewer.ViewModels;
 
-namespace SmartLogViewer;
-
-public partial class MainWindow : Window
+internal class MainViewModel
 {
-    private readonly MainViewModel viewModel;
-    private readonly string viewModelFile = "MainViewModel.json";
+    public string? ScreenName { get; set; }
 
-    public MainWindow()
-    {
-        InitializeComponent();
-        viewModel = new MainViewModel();
-    }
+    public double Left { get; set; }
 
-    protected override void OnKeyDown(KeyEventArgs e)
-    {
-        base.OnKeyDown(e);
-        if (e.Key == Key.Escape)
-            Close();
-    }
+    public double Top { get; set; }
+
+    public double Width { get; set; }
+
+    public double Height { get; set; }
+
+    public bool IsMaximized { get; set; }
 }
