@@ -1,7 +1,7 @@
 ﻿//******************************************************************************************
 // Copyright © 2017 - 2026 Wolfgang Foerster (wolfoerster@gmx.de)
 //
-// This file is part of the SmartLogViewer project which can be found on github.com
+// This file is part of the SmartLogViewer project which can be found on github.com.
 //
 // SmartLogViewer is free software: you can redistribute it and/or modify it under the terms 
 // of the GNU General Public License as published by the Free Software Foundation, 

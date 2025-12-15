@@ -15,30 +15,23 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-namespace SmartLogViewer.Common;
+namespace SmartLogViewer.ViewModels.Basics;
 
-public interface IByteParser
+/// <summary>
+/// Represents the method that will handle the <see cref="INotifyPropertyChangedPreview.PropertyChangedPreview"/>
+/// event raised when a property is about to be changed on a component.
+/// </summary>
+public delegate void PropertyChangedPreviewEventHandler(object? sender, PropertyChangedPreviewEventArgs e);
+
+/// <summary>
+/// Notifies clients that a property value is about to be changed.
+/// </summary>
+public interface INotifyPropertyChangedPreview
 {
     /// <summary>
-    /// Check if there are log entries of known format.
-    /// If yes, the ByteParser can preprocess the file and store the result in a new file
-    /// which is then opened with the LogReader. This step is optional.
+    /// Occurs right before a property value is about to be changed.
+    /// To prevent changing the value, set the IsCancelled property
+    /// of the <see cref="PropertyChangedPreviewEventArgs"/> to true.
     /// </summary>
-    bool CheckFormat(byte[] bytes, out string? newFileName);
-
-    /// <summary>
-    /// The bytes which contain the log entries.
-    /// </summary>
-    byte[] Bytes { get; set; }
-
-    /// <summary>
-    /// Gets the current position, i.e. the position of the next log entry.
-    /// </summary>
-    int CurrentPosition { get; }
-
-    /// <summary>
-    /// Reads the next log entry and updates the current position.
-    /// Returns an error string or null if no error ocurred.
-    /// </summary>
-    string? ReadNextEntry(out LogRecord logRecord);
+    event PropertyChangedPreviewEventHandler? PropertyChangedPreview;
 }

@@ -1,7 +1,7 @@
 ﻿//******************************************************************************************
 // Copyright © 2017 - 2026 Wolfgang Foerster (wolfoerster@gmx.de)
 //
-// This file is part of the SmartLogViewer project which can be found on github.com
+// This file is part of the SmartLogViewer project which can be found on github.com.
 //
 // SmartLogViewer is free software: you can redistribute it and/or modify it under the terms 
 // of the GNU General Public License as published by the Free Software Foundation, 
@@ -17,18 +17,28 @@
 
 using System.ComponentModel;
 
-namespace SmartLogViewer.ViewModels;
+namespace SmartLogViewer.ViewModels.Basics;
 
-public class PropertyChangedNotifier : INotifyPropertyChanged, INotifyPropertyChangedPreview
+/// <summary>
+/// Provides data for the <see cref="INotifyPropertyChangedPreview.PropertyChangedPreview"/> event.
+/// </summary>
+public class PropertyChangedPreviewEventArgs : PropertyChangedEventArgs
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public PropertyChangedPreviewEventArgs(object? oldValue, object? newValue, string? propertyName)
+        : base(propertyName)
+    {
+        OldValue = oldValue;
+        NewValue = newValue;
+    }
 
-    public event PropertyChangedEventHandler? PropertyChangedPreview;
+    public object? OldValue { get; set; }
 
-    //protected bool Checkset()
-}
+    public object? NewValue { get; set; }
 
-public interface INotifyPropertyChangedPreview
-{
-    public event PropertyChangedEventHandler? PropertyChangedPreview;
+    public bool IsCancelled { get; private set; }
+
+    public void Cancel()
+    {
+        IsCancelled = true;
+    }
 }
