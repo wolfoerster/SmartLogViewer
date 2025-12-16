@@ -15,21 +15,30 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
+using SmartLogging;
+using SmartLogViewer.Core;
 using SmartLogViewer.ViewModels;
+using static SmartLogViewer.Core.Helper;
 
 namespace SmartLogViewer;
 
 public partial class MainWindow : Window
 {
+    private static readonly SmartLogger Log = new();
     private readonly MainViewModel viewModel;
-    private readonly string viewModelFile = "MainViewModel.json";
 
     public MainWindow()
     {
+        Log.Information();
         InitializeComponent();
-        viewModel = new MainViewModel();
+        DataContext = viewModel = Restore<MainViewModel>();
+
+        Loaded += MeLoaded;
+        Closing += MeClosing;
+        RestoreSizeAndPosition();
     }
 
     protected override void OnKeyDown(KeyEventArgs e)
@@ -37,5 +46,52 @@ public partial class MainWindow : Window
         base.OnKeyDown(e);
         if (e.Key == Key.Escape)
             Close();
+    }
+
+    private void MeLoaded(object sender, RoutedEventArgs e)
+    {
+        Log.Information();
+        if (viewModel.IsMaximized)
+            WindowState = WindowState.Maximized;
+    }
+
+    private void MeClosing(object? sender, CancelEventArgs e)
+    {
+        Log.Information();
+        StoreSizeAndPosition();
+        LogWriter.Flush();
+    }
+
+    private void RestoreSizeAndPosition()
+    {
+        var name = viewModel.ScreenName;
+        var screen = Screen.LookUpByName(name);
+        if (screen == null)
+            return;
+
+        Top = viewModel.Top;
+        Left = viewModel.Left;
+        Width = viewModel.Width;
+        Height = viewModel.Height;
+        WindowState = WindowState.Normal;
+        WindowStartupLocation = WindowStartupLocation.Manual;
+    }
+
+    private void StoreSizeAndPosition()
+    {
+        viewModel.IsMaximized = WindowState == WindowState.Maximized;
+
+        if (WindowState != WindowState.Normal)
+            WindowState = WindowState.Normal;
+
+        var pt = new Point(Left, Top).ToPixel(this);
+        var screen = Screen.LookUpByPixel(pt);
+        viewModel.ScreenName = screen?.Name;
+
+        viewModel.Top = Top;
+        viewModel.Left = Left;
+        viewModel.Width = Width;
+        viewModel.Height = Height;
+        viewModel.Store();
     }
 }

@@ -17,12 +17,15 @@
 
 using System;
 using System.IO;
+using System.Windows;
+using System.Windows.Media;
+using Newtonsoft.Json;
 
 namespace SmartLogViewer.Core;
 
 internal static class Helper
 {
-    public static string GetUserFile(string fileName)
+    public static string GetFullPath(string fileName)
     {
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SmartLogViewer");
 
@@ -30,5 +33,38 @@ internal static class Helper
             Directory.CreateDirectory(dir);
 
         return Path.Combine(dir, fileName);
+    }
+
+    public static void Store(this object obj)
+    {
+        var text = JsonConvert.SerializeObject(obj, Formatting.Indented);
+        var path = GetFullPath(obj.GetType().Name + ".json");
+        File.WriteAllText(path, text);
+    }
+
+    public static T Restore<T>() where T : new()
+    {
+        var path = GetFullPath(typeof(T).Name + ".json");
+        if (!File.Exists(path))
+            return new T();
+
+        var text = File.ReadAllText(path);
+        var obj = JsonConvert.DeserializeObject<T>(text);
+        if (obj == null)
+            return new T();
+
+        return obj;
+    }
+
+    public static Point ToPixel(this Point pointInDip, Visual visual)
+    {
+        var source = PresentationSource.FromVisual(visual);
+        return source.CompositionTarget.TransformToDevice.Transform(pointInDip);
+    }
+
+    public static Point ToDip(this Point pointInPixel, Visual visual)
+    {
+        var source = PresentationSource.FromVisual(visual);
+        return source.CompositionTarget.TransformFromDevice.Transform(pointInPixel);
     }
 }

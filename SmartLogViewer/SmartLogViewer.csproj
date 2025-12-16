@@ -17,4 +17,8 @@
     <Folder Include="Views\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="SmartLogging" Version="3.0.0" />
+  </ItemGroup>
+
 </Project>

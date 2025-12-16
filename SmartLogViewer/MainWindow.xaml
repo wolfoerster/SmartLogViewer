@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartLogViewer"
+        xmlns:viewmos="clr-namespace:SmartLogViewer.ViewModels"
         mc:Ignorable="d"
-        Background="Black"
-        WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="450" Width="800">
+        d:DataContext="{d:DesignInstance Type=viewmos:MainViewModel}"
+        Background="Black">
     <Grid>
 
     </Grid>
