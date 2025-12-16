@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:SmartLogViewer"
         xmlns:viewmos="clr-namespace:SmartLogViewer.ViewModels"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance Type=viewmos:MainViewModel}"
-        Background="Black">
+        d:DataContext="{d:DesignInstance Type=viewmos:MainViewModel}">
     <Grid>
 
     </Grid>

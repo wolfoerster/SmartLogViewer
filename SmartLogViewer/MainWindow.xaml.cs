@@ -29,12 +29,14 @@ public partial class MainWindow : Window
 {
     private static readonly SmartLogger Log = new();
     private readonly MainViewModel viewModel;
+    private WindowLocation Location => viewModel.MainWindowLocation;
 
     public MainWindow()
     {
         Log.Information();
         InitializeComponent();
-        DataContext = viewModel = Restore<MainViewModel>();
+        viewModel = Restore<MainViewModel>();
+        DataContext = viewModel;
 
         Loaded += MeLoaded;
         Closing += MeClosing;
@@ -51,47 +53,47 @@ public partial class MainWindow : Window
     private void MeLoaded(object sender, RoutedEventArgs e)
     {
         Log.Information();
-        if (viewModel.IsMaximized)
+        if (Location.IsMaximized)
             WindowState = WindowState.Maximized;
     }
 
     private void MeClosing(object? sender, CancelEventArgs e)
     {
         Log.Information();
-        StoreSizeAndPosition();
         LogWriter.Flush();
+        StoreSizeAndPosition();
     }
 
     private void RestoreSizeAndPosition()
     {
-        var name = viewModel.ScreenName;
+        var name = Location.ScreenName;
         var screen = Screen.LookUpByName(name);
         if (screen == null)
             return;
 
-        Top = viewModel.Top;
-        Left = viewModel.Left;
-        Width = viewModel.Width;
-        Height = viewModel.Height;
+        Top = Location.Top;
+        Left = Location.Left;
+        Width = Location.Width;
+        Height = Location.Height;
         WindowState = WindowState.Normal;
         WindowStartupLocation = WindowStartupLocation.Manual;
     }
 
     private void StoreSizeAndPosition()
     {
-        viewModel.IsMaximized = WindowState == WindowState.Maximized;
+        Location.IsMaximized = WindowState == WindowState.Maximized;
 
         if (WindowState != WindowState.Normal)
             WindowState = WindowState.Normal;
 
         var pt = new Point(Left, Top).ToPixel(this);
         var screen = Screen.LookUpByPixel(pt);
-        viewModel.ScreenName = screen?.Name;
+        Location.ScreenName = screen?.Name;
 
-        viewModel.Top = Top;
-        viewModel.Left = Left;
-        viewModel.Width = Width;
-        viewModel.Height = Height;
+        Location.Top = Top;
+        Location.Left = Left;
+        Location.Width = Width;
+        Location.Height = Height;
         viewModel.Store();
     }
 }

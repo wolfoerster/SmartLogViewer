@@ -15,20 +15,19 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using SmartLogViewer.Core;
-using SmartLogViewer.ViewModels.Basics;
+namespace SmartLogViewer.Core;
 
-namespace SmartLogViewer.ViewModels;
-
-internal class MainViewModel : PropertyChangedNotifier
+internal class WindowLocation
 {
-    public WindowLocation MainWindowLocation { get; set; } = new();
+    public double Left { get; set; }
 
-    private bool isDarkMode;
+    public double Top { get; set; }
 
-    public bool IsDarkMode
-    {
-        get => isDarkMode;
-        set => Checkset(ref isDarkMode, value);
-    }
+    public double Width { get; set; }
+
+    public double Height { get; set; }
+
+    public bool IsMaximized { get; set; }
+
+    public string? ScreenName { get; set; }
 }

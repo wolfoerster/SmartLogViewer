@@ -15,20 +15,13 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using SmartLogViewer.Core;
-using SmartLogViewer.ViewModels.Basics;
+using System.Windows.Media;
 
-namespace SmartLogViewer.ViewModels;
+namespace SmartLogViewer.Core;
 
-internal class MainViewModel : PropertyChangedNotifier
+internal class ColorTheme
 {
-    public WindowLocation MainWindowLocation { get; set; } = new();
+    public Color Background { get; set; }
 
-    private bool isDarkMode;
-
-    public bool IsDarkMode
-    {
-        get => isDarkMode;
-        set => Checkset(ref isDarkMode, value);
-    }
+    public Color Foreground { get; set; }
 }
