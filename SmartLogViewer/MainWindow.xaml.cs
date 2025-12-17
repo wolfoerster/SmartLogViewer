@@ -35,6 +35,8 @@ public partial class MainWindow : Window
     {
         Log.Information();
         InitializeComponent();
+        Title = $"SmartLogViewer {App.Version.Major}.{App.Version.Minor}.{App.Version.Build}";
+
         viewModel = Restore<MainViewModel>();
         viewModel.UpdateColorTheme();
         DataContext = viewModel;

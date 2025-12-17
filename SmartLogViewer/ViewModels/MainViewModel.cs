@@ -45,12 +45,12 @@ internal class MainViewModel : PropertyChangedNotifier
         var index = isDarkMode ? 0 : 1;
         ColorTheme.Background = CreateBrush(ThemeColors.Background[index]);
         ColorTheme.Foreground = CreateBrush(ThemeColors.Foreground[index]);
-    }
 
-    private static SolidColorBrush CreateBrush(Color color)
-    {
-        var brush = new SolidColorBrush(color);
-        brush.Freeze();
-        return brush;
+        static SolidColorBrush CreateBrush(Color color)
+        {
+            var brush = new SolidColorBrush(color);
+            brush.Freeze();
+            return brush;
+        }
     }
 }

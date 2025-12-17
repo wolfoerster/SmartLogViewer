@@ -35,7 +35,7 @@ public partial class App : Application
 
         var assembly = Assembly.GetExecutingAssembly();
         var name = assembly.GetName();
-        Version = name.Version;
+        Version = name.Version ?? new Version(0, 0, 0);
 
         LogWriter.Init(new LogSettings 
         { 
@@ -63,7 +63,7 @@ public partial class App : Application
         Log.Debug(new { theme });
     }
 
-    public static Version? Version { get; }
+    public static Version Version { get; }
 
     private static void OverrideMetadata(DependencyProperty property, object value)
         => property.OverrideMetadata(typeof(UIElement), new FrameworkPropertyMetadata(value));

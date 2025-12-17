@@ -14,6 +14,11 @@
       <Setter Property="Background" Value="{Binding ColorTheme.Background}"/>
       <Setter Property="Foreground" Value="{Binding ColorTheme.Foreground}"/>
     </Style>
+    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Background" Value="{Binding ColorTheme.Background}"/>
+      <Setter Property="Foreground" Value="{Binding ColorTheme.Foreground}"/>
+      <Setter Property="Width" Value="80"/>
+    </Style>
   </Window.Resources>
   <Grid Margin="4">
     <Grid.RowDefinitions>
@@ -21,7 +26,11 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
     <StackPanel Orientation="Horizontal">
-      <CheckBox Content="Dark mode" IsChecked="{Binding IsDarkMode}"/>
+      <Button Content="Open"/>
+      <CheckBox Content="Dark mode" IsChecked="{Binding IsDarkMode}" Margin="12,0,0,0" VerticalAlignment="Center"/>
     </StackPanel>
+    <ListBox Grid.Row="1" Background="{Binding ColorTheme.Background}" Margin="0,4,0,0">
+      
+    </ListBox>
   </Grid>
 </Window>

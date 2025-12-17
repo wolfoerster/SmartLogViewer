@@ -6,7 +6,16 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <AssemblyVersion>0.1.0</AssemblyVersion>
+    <ApplicationIcon>App.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="App.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SmartLogViewer.Common\SmartLogViewer.Common.csproj" />
@@ -19,6 +28,12 @@
 
   <ItemGroup>
     <PackageReference Include="SmartLogging" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="App.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
