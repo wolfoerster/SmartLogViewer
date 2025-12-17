@@ -36,6 +36,7 @@ public partial class MainWindow : Window
         Log.Information();
         InitializeComponent();
         viewModel = Restore<MainViewModel>();
+        viewModel.UpdateColorTheme();
         DataContext = viewModel;
 
         Loaded += MeLoaded;

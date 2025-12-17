@@ -68,13 +68,11 @@ public class PropertyChangedNotifier : INotifyPropertyChanged, INotifyPropertyCh
     {
         if (!EqualityComparer<T>.Default.Equals(backingField, newValue))
         {
-
             if (RaisePropertyChangedPreview(backingField, newValue, propertyName))
             {
 
                 backingField = newValue;
                 RaisePropertyChanged(propertyName);
-
                 return true;
             }
         }

@@ -19,9 +19,11 @@ using System.Windows.Media;
 
 namespace SmartLogViewer.Core;
 
-internal class ColorTheme
+internal static class ThemeColors
 {
-    public Color Background { get; set; }
+    public static Color[] Background = [Colo(30, 30, 30), Colo(220, 220, 220)];
 
-    public Color Foreground { get; set; }
+    public static Color[] Foreground = [Colo(220, 220, 220), Colo(30, 30, 30)];
+
+    private static Color Colo(byte r, byte g, byte b) => Color.FromRgb(r, g, b);
 }

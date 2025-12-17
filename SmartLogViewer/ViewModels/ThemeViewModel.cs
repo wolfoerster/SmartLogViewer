@@ -16,41 +16,23 @@
 //******************************************************************************************
 
 using System.Windows.Media;
-using SmartLogViewer.Core;
 using SmartLogViewer.ViewModels.Basics;
 
 namespace SmartLogViewer.ViewModels;
 
-internal class MainViewModel : PropertyChangedNotifier
+internal class ThemeViewModel : PropertyChangedNotifier
 {
-    public WindowLocation MainWindowLocation { get; set; } = new();
-
-    public ThemeViewModel ColorTheme { get; set; } = new();
-
-    private bool isDarkMode;
-    public bool IsDarkMode
+    private Brush background = Brushes.Red;
+    public Brush Background
     {
-        get => isDarkMode;
-        set
-        {
-            if (Checkset(ref isDarkMode, value))
-            {
-                UpdateColorTheme();
-            }
-        }
+        get => background;
+        set => Checkset(ref background, value);
     }
 
-    public void UpdateColorTheme()
+    private Brush foreground = Brushes.Red;
+    public Brush Foreground
     {
-        var index = isDarkMode ? 0 : 1;
-        ColorTheme.Background = CreateBrush(ThemeColors.Background[index]);
-        ColorTheme.Foreground = CreateBrush(ThemeColors.Foreground[index]);
-    }
-
-    private static SolidColorBrush CreateBrush(Color color)
-    {
-        var brush = new SolidColorBrush(color);
-        brush.Freeze();
-        return brush;
+        get => foreground;
+        set => Checkset(ref foreground, value);
     }
 }

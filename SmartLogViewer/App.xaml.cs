@@ -41,7 +41,7 @@ public partial class App : Application
         { 
             LogToFile = true, 
             MaxLogFileSize = 4 * 1024 * 1024,
-            MinimumLogLevel = LogLevel.Verbose// GetMinimumLogLevel(),
+            MinimumLogLevel = GetMinimumLogLevel(),
         });
 
         Log = new SmartLogger();
