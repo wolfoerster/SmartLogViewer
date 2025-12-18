@@ -15,6 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -78,5 +79,22 @@ public class PropertyChangedNotifier : INotifyPropertyChanged, INotifyPropertyCh
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Sets a property value to a new value if the values are different.
+    /// Raises the PropertyChangedPreview event before the value is changed.
+    /// If this event is not cancelled, the property value is changed and the PropertyChanged event is raised.
+    /// In this case the specified action will be performed before the method returns.
+    /// </summary>
+    /// <returns>True, if the property value was changed, otherwise false.</returns>
+    protected bool Checkset<T>(ref T backingField, T newValue, Action valueHasBeenChanged, [CallerMemberName] string? propertyName = null)
+    {
+        var result = Checkset(ref backingField, newValue, propertyName);
+
+        if (result)
+            valueHasBeenChanged();
+
+        return result;
     }
 }

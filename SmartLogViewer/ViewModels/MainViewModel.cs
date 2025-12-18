@@ -37,13 +37,7 @@ internal class MainViewModel : PropertyChangedNotifier
     public bool IsDarkMode
     {
         get => isDarkMode;
-        set
-        {
-            if (Checkset(ref isDarkMode, value))
-            {
-                UpdateColorTheme();
-            }
-        }
+        set => Checkset(ref isDarkMode, value, () => UpdateColorTheme());
     }
 
     public string LastWorkspace { get; set; } = Default;
