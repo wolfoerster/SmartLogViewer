@@ -15,12 +15,14 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
+using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using SmartLogging;
 using SmartLogViewer.Core;
 using SmartLogViewer.ViewModels;
+using SmartLogViewer.Views;
 using static SmartLogViewer.Core.Helper;
 
 namespace SmartLogViewer;
@@ -59,6 +61,10 @@ public partial class MainWindow : Window
     private void MeClosing(object? sender, CancelEventArgs e)
     {
         Log.Information();
+
+        if (Content is MainControl mainControl && mainControl.DataContext is MainViewModel mainViewModel)
+            mainViewModel.Shutdown();
+
         LogWriter.Flush();
         StoreSizeAndPosition();
     }

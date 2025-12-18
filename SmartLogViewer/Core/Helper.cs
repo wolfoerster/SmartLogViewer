@@ -27,11 +27,11 @@ namespace SmartLogViewer.Core;
 
 internal static class Helper
 {
-    public static RoutedUICommand CreateCommand(string text, string name, Key key, ModifierKeys modifier, string str)
-        => CreateCommand(text, name, new KeyGesture(key, modifier, str));
+    public static RoutedUICommand CreateCommand(string name, string description, Key key, ModifierKeys modifier, string str)
+        => CreateCommand(name, description, new KeyGesture(key, modifier, str));
 
-    public static RoutedUICommand CreateCommand(string text, string name, KeyGesture keyGesture)
-        => new(text, name, typeof(FrameworkElement), new InputGestureCollection(new List<InputGesture>() { keyGesture }));
+    public static RoutedUICommand CreateCommand(string name, string description, KeyGesture keyGesture)
+        => new(description, name, typeof(FrameworkElement), new InputGestureCollection(new List<InputGesture>() { keyGesture }));
 
     public static string GetFullPath(string fileName)
     {

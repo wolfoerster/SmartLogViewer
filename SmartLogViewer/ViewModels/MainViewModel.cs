@@ -15,7 +15,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
+using System.Collections.Generic;
+using System.IO;
 using System.Windows.Media;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using SmartLogging;
 using SmartLogViewer.Core;
 using SmartLogViewer.ViewModels.Basics;
 
@@ -23,7 +28,8 @@ namespace SmartLogViewer.ViewModels;
 
 internal class MainViewModel : PropertyChangedNotifier
 {
-    public WindowLocation MainWindowLocation { get; set; } = new();
+    private const string Default = "Default";
+    private static readonly SmartLogger Log = new();
 
     public ThemeViewModel ColorTheme { get; set; } = new();
 
@@ -40,7 +46,57 @@ internal class MainViewModel : PropertyChangedNotifier
         }
     }
 
-    public void UpdateColorTheme()
+    public string LastWorkspace { get; set; } = Default;
+
+    public Dictionary<string, WorkspaceViewModel> Workspaces { get; set; } = [];
+
+    [JsonIgnore]
+    public WorkspaceViewModel CurrentWorkspace { get; set; } = new();
+
+    public void Initialize()
+    {
+        UpdateColorTheme();
+        InitWorkspaces();
+    }
+
+    public void Shutdown()
+    {
+        Log.Information();
+        this.Store();
+    }
+
+    public void OpenFileInteractive()
+    {
+        var dlg = new OpenFileDialog
+        {
+            Title = "Select a log file",
+            Filter = "Log Files|*.log|All Files|*.*",
+            InitialDirectory = CurrentWorkspace.GetDirectory(),
+        };
+
+        if (dlg.ShowDialog() == true)
+            OpenFile(dlg.FileName);
+    }
+
+    private void OpenFile(string fileName)
+    {
+        if (!File.Exists(fileName))
+        {
+            Log.Information($"File '{fileName}' does not exist");
+            return;
+        }
+
+        if (CurrentWorkspace.Contains(fileName))
+        {
+            Log.Information($"File '{fileName}' already open");
+            return;
+        }
+
+        CurrentWorkspace.Add(fileName);
+        Log.Information($"File '{fileName}' opened");
+    }
+
+    private void UpdateColorTheme()
     {
         var index = isDarkMode ? 0 : 1;
         ColorTheme.Background = CreateBrush(ThemeColors.Background[index]);
@@ -52,5 +108,16 @@ internal class MainViewModel : PropertyChangedNotifier
             brush.Freeze();
             return brush;
         }
+    }
+
+    private void InitWorkspaces()
+    {
+        if (Workspaces.Count == 0)
+            Workspaces.Add(Default, new WorkspaceViewModel());
+
+        if (!Workspaces.ContainsKey(LastWorkspace))
+            LastWorkspace = Default;
+
+        CurrentWorkspace = Workspaces[LastWorkspace];
     }
 }

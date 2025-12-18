@@ -15,32 +15,32 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Windows;
-using System.Windows.Controls;
-using SmartLogging;
-using SmartLogViewer.ViewModels;
-using static SmartLogViewer.Core.Helper;
+using System.Collections.Generic;
+using SmartLogViewer.ViewModels.Basics;
+using static System.IO.Path;
 
-namespace SmartLogViewer.Views
+namespace SmartLogViewer.ViewModels;
+
+internal class WorkspaceViewModel : PropertyChangedNotifier
 {
-    public partial class MainControl : UserControl
+    public List<string> Files { get; set; } = [];
+
+    public string GetDirectory()
     {
-        private static readonly SmartLogger Log = new();
-        private readonly MainViewModel ViewModel;
-
-        public MainControl()
+        if (Files.Count > 0)
         {
-            Log.Information();
-            InitializeComponent();
-
-            ViewModel = Restore<MainViewModel>();
-            ViewModel.Initialize();
-            DataContext = ViewModel;
+            var directory = GetDirectoryName(Files[^1]);
+            if (directory != null)
+                return directory;
         }
 
-        private void OnOpenClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.OpenFileInteractive();
-        }
+        return GetTempPath();
+    }
+
+    public bool Contains(string fileName) => Files.Contains(fileName);
+
+    public void Add(string fileName)
+    {
+        Files.Add(fileName);
     }
 }

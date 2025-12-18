@@ -26,7 +26,7 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
     <StackPanel Orientation="Horizontal">
-      <Button Content="Open"/>
+      <Button Content="Open" ToolTip="Open a log file" Click="OnOpenClick"/>
       <CheckBox Content="Dark mode" IsChecked="{Binding IsDarkMode}" Margin="12,0,0,0" VerticalAlignment="Center"/>
     </StackPanel>
     <ListBox Grid.Row="1" Background="{Binding ColorTheme.Background}" Margin="0,4,0,0">
