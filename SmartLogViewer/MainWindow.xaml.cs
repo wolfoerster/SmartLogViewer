@@ -28,8 +28,7 @@ namespace SmartLogViewer;
 public partial class MainWindow : Window
 {
     private static readonly SmartLogger Log = new();
-    private readonly MainViewModel viewModel;
-    private WindowLocation Location => viewModel.MainWindowLocation;
+    private readonly WindowLocation Location;
 
     public MainWindow()
     {
@@ -37,10 +36,7 @@ public partial class MainWindow : Window
         InitializeComponent();
         Title = $"SmartLogViewer {App.Version.Major}.{App.Version.Minor}.{App.Version.Build}";
 
-        viewModel = Restore<MainViewModel>();
-        viewModel.UpdateColorTheme();
-        DataContext = viewModel;
-
+        Location = Restore<WindowLocation>();
         Loaded += MeLoaded;
         Closing += MeClosing;
         RestoreSizeAndPosition();
@@ -85,9 +81,7 @@ public partial class MainWindow : Window
     private void StoreSizeAndPosition()
     {
         Location.IsMaximized = WindowState == WindowState.Maximized;
-
-        if (WindowState != WindowState.Normal)
-            WindowState = WindowState.Normal;
+        WindowState = WindowState.Normal;
 
         var pt = new Point(Left, Top).ToPixel(this);
         var screen = Screen.LookUpByPixel(pt);
@@ -97,6 +91,6 @@ public partial class MainWindow : Window
         Location.Left = Left;
         Location.Width = Width;
         Location.Height = Height;
-        viewModel.Store();
+        Location.Store();
     }
 }

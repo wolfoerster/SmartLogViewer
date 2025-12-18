@@ -16,8 +16,10 @@
 //******************************************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using Newtonsoft.Json;
 
@@ -25,6 +27,12 @@ namespace SmartLogViewer.Core;
 
 internal static class Helper
 {
+    public static RoutedUICommand CreateCommand(string text, string name, Key key, ModifierKeys modifier, string str)
+        => CreateCommand(text, name, new KeyGesture(key, modifier, str));
+
+    public static RoutedUICommand CreateCommand(string text, string name, KeyGesture keyGesture)
+        => new(text, name, typeof(FrameworkElement), new InputGestureCollection(new List<InputGesture>() { keyGesture }));
+
     public static string GetFullPath(string fileName)
     {
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SmartLogViewer");

@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <Folder Include="ByteParser\" />
-    <Folder Include="Views\" />
   </ItemGroup>
 
   <ItemGroup>
