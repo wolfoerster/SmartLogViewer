@@ -15,10 +15,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using System.Windows.Media;
 using Microsoft.Win32;
 using Newtonsoft.Json;
@@ -41,6 +42,11 @@ internal class MainViewModel : PropertyChangedNotifier
         set => Checkset(ref isDarkMode, value, () => UpdateColorTheme());
     }
 
+    public List<WorkspaceViewModel> Workspaces { get; set; } = [];
+
+    [JsonIgnore]
+    public ObservableCollection<WorkspaceViewModel> WorkspaceCollection { get; set; } = [];
+
     private int selectedWorkspaceIndex;
     public int SelectedWorkspaceIndex
     {
@@ -48,13 +54,8 @@ internal class MainViewModel : PropertyChangedNotifier
         set => Checkset(ref selectedWorkspaceIndex, value);
     }
 
-    public List<WorkspaceViewModel> Workspaces { get; set; } = [];
-
     [JsonIgnore]
-    public ObservableCollection<WorkspaceViewModel> WorkspaceCollection { get; set; } = [];
-
-    [JsonIgnore]
-    public WorkspaceViewModel CurrentWorkspace { get; set; } = new();
+    public WorkspaceViewModel SelectedWorkspace { get; set; } = new();
 
     public void Initialize()
     {
@@ -68,13 +69,19 @@ internal class MainViewModel : PropertyChangedNotifier
         this.Store();
     }
 
+    public void RemoveSelectedWorkspace()
+    {
+        if (SelectedWorkspaceIndex > 0 && SelectedWorkspaceIndex < WorkspaceCollection.Count)
+            WorkspaceCollection.RemoveAt(SelectedWorkspaceIndex);
+    }
+
     public void OpenFileInteractive()
     {
         var dlg = new OpenFileDialog
         {
             Title = "Select a log file",
             Filter = "Log Files|*.log|All Files|*.*",
-            InitialDirectory = CurrentWorkspace.GetDirectory(),
+            InitialDirectory = SelectedWorkspace.GetDirectory(),
         };
 
         if (dlg.ShowDialog() == true)
@@ -89,13 +96,13 @@ internal class MainViewModel : PropertyChangedNotifier
             return;
         }
 
-        if (CurrentWorkspace.Contains(fileName))
+        if (SelectedWorkspace.Contains(fileName))
         {
             Log.Information($"File '{fileName}' already open");
             return;
         }
 
-        CurrentWorkspace.Add(fileName);
+        SelectedWorkspace.Add(fileName);
         Log.Information($"File '{fileName}' opened");
     }
 
@@ -118,10 +125,30 @@ internal class MainViewModel : PropertyChangedNotifier
         if (Workspaces.Count == 0)
             Workspaces.Add(new WorkspaceViewModel());
 
-        //for (int i = 0; i < 3; i++)
-          //  Workspaces.Add(new WorkspaceViewModel(Guid.NewGuid().ToString()));
+        for (int i = 0; i < Workspaces.Count; i++)
+            WorkspaceCollection.Add(Workspaces[i]);
 
-        WorkspaceCollection = new ObservableCollection<WorkspaceViewModel>(Workspaces);
+        WorkspaceCollection.CollectionChanged += WorkspaceCollectionChanged;
+
         RaisePropertyChanged(nameof(SelectedWorkspaceIndex));
+    }
+
+    private void WorkspaceCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add
+            && e.NewItems != null && e.NewItems.Count == 1
+            && e.NewItems[0] is WorkspaceViewModel newWorkspace)
+        {
+            Workspaces.Add(newWorkspace);
+            return;
+        }
+
+        if (e.Action == NotifyCollectionChangedAction.Remove
+            && e.OldItems != null && e.OldItems.Count == 1
+            && e.OldItems[0] is WorkspaceViewModel oldWorkspace)
+        {
+            Workspaces.Remove(oldWorkspace);
+            return;
+        }
     }
 }

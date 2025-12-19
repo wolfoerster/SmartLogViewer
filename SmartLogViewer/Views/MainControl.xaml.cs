@@ -38,9 +38,19 @@ namespace SmartLogViewer.Views
             DataContext = ViewModel;
         }
 
-        private void OnOpenClick(object sender, RoutedEventArgs e)
+        private void OnOpenClicked(object sender, RoutedEventArgs e)
         {
             ViewModel.OpenFileInteractive();
+        }
+
+        private void OnRemoveWorkspace(object sender, RoutedEventArgs e)
+        {
+            ViewModel.RemoveSelectedWorkspace();
+        }
+
+        private void OnRemoveFile(object sender, RoutedEventArgs e)
+        {
+            ViewModel.SelectedWorkspace.RemoveSelectedFile();
         }
     }
 }

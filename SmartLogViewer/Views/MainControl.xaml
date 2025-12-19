@@ -22,7 +22,14 @@
     <Style TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
       <Setter Property="Background" Value="{Binding ColorTheme.Background}"/>
       <Setter Property="Foreground" Value="{Binding ColorTheme.Foreground}"/>
-      <Setter Property="Width" Value="80"/>
+    </Style>
+    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+      <Setter Property="Background" Value="{Binding ColorTheme.Background}"/>
+      <Setter Property="Foreground" Value="{Binding ColorTheme.Foreground}"/>
+    </Style>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+      <Setter Property="Background" Value="{Binding ColorTheme.Background}"/>
+      <Setter Property="Foreground" Value="{Binding ColorTheme.Foreground}"/>
     </Style>
   </UserControl.Resources>
   <Grid Margin="4">
@@ -36,21 +43,78 @@
       <ColumnDefinition Width="Auto"/>
       <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
-    <StackPanel Orientation="Horizontal">
-      <Button Content="Open" ToolTip="Open a log file" Click="OnOpenClick"/>
+    <!--<StackPanel Orientation="Horizontal">
       <CheckBox Content="Dark mode" IsChecked="{Binding IsDarkMode}" Margin="12,0,0,0" VerticalAlignment="Center"/>
-    </StackPanel>
-    <GroupBox Grid.Row="1" Header="Workspace" Padding="8,0">
-      <StackPanel Orientation="Vertical">
-        <ListBox ItemsSource="{Binding WorkspaceCollection}" SelectedIndex="{Binding SelectedWorkspaceIndex}" Width="Auto" Margin="0,8">
-          <ListBox.ItemTemplate>
-            <DataTemplate>
-              <TextBlock Text="{Binding Name}"/>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
-        <Button Content="New workspace" Width="Auto" Margin="0,8"/>
-      </StackPanel>
+    </StackPanel>-->
+    <GroupBox Grid.Row="1" Grid.Column="0" Header="Workspaces" Padding="8,0" MinWidth="120" MinHeight="300" Margin="4">
+      <DataGrid Background="{Binding ColorTheme.Background}" Padding="4"
+        ItemsSource="{Binding WorkspaceCollection}" 
+        SelectedIndex="{Binding SelectedWorkspaceIndex}"
+        AutoGenerateColumns="False"
+        HeadersVisibility="None"
+        Margin="0,8">
+        <DataGrid.Columns>
+          <DataGridTemplateColumn>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Name}" 
+                  Background="{Binding DataContext.ColorTheme.Background, RelativeSource={RelativeSource AncestorType=local:MainControl}}" 
+                  Foreground="{Binding DataContext.ColorTheme.Foreground, RelativeSource={RelativeSource AncestorType=local:MainControl}}" 
+                  MinWidth="120"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+            <DataGridTemplateColumn.CellEditingTemplate>
+              <DataTemplate>
+                <TextBox Text="{Binding Name}" 
+                  Background="{Binding DataContext.ColorTheme.Background, RelativeSource={RelativeSource AncestorType=local:MainControl}}" 
+                  Foreground="{Binding DataContext.ColorTheme.Foreground, RelativeSource={RelativeSource AncestorType=local:MainControl}}" 
+                  MinWidth="120"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellEditingTemplate>
+          </DataGridTemplateColumn>
+          <!--<DataGridTemplateColumn>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Grid Background="{Binding DataContext.ColorTheme.Background, RelativeSource={RelativeSource AncestorType=local:MainControl}}">
+                  <Button Width="14" Height="14" Click="OnRemoveWorkspace" 
+                    Background="{Binding DataContext.ColorTheme.Background, RelativeSource={RelativeSource AncestorType=local:MainControl}}"/>
+                </Grid>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>-->
+        </DataGrid.Columns>
+      </DataGrid>
+    </GroupBox>
+    <GroupBox Grid.Row="1" Grid.Column="1" Header="Files" Padding="8,0" MinWidth="120" MinHeight="300" Margin="4">
+      <!--<DataGrid Background="{Binding ColorTheme.Background}" Padding="4"
+        ItemsSource="{Binding SelectedWorkspace.FileCollection}" 
+        SelectedIndex="{Binding SelectedWorkspace.SelectedFileIndex}"
+        AutoGenerateColumns="False"
+        HeadersVisibility="None"
+        Margin="0,8">
+        <DataGrid.Columns>
+          <DataGridTemplateColumn>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding}" 
+                  Background="{Binding DataContext.ColorTheme.Background, RelativeSource={RelativeSource AncestorType=local:MainControl}}" 
+                  Foreground="{Binding DataContext.ColorTheme.Foreground, RelativeSource={RelativeSource AncestorType=local:MainControl}}" 
+                  MinWidth="120"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn>
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <Grid Background="{Binding DataContext.ColorTheme.Background, RelativeSource={RelativeSource AncestorType=local:MainControl}}">
+                  <Button Width="14" Height="14" Click="OnRemoveFile" 
+                    Background="{Binding DataContext.ColorTheme.Background, RelativeSource={RelativeSource AncestorType=local:MainControl}}"/>
+                </Grid>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+        </DataGrid.Columns>
+      </DataGrid>-->
     </GroupBox>
   </Grid>
 </UserControl>

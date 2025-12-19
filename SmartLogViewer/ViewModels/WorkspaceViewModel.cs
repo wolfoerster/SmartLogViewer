@@ -15,7 +15,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using Newtonsoft.Json;
 using SmartLogViewer.ViewModels.Basics;
 using static System.IO.Path;
 
@@ -23,21 +27,39 @@ namespace SmartLogViewer.ViewModels;
 
 internal class WorkspaceViewModel : PropertyChangedNotifier
 {
-    public const string DefaultName = "Default";
+    public static uint WorkspaceCount;
 
     public WorkspaceViewModel()
+        : this($"New workspace {WorkspaceCount}")
     {
-        Name = DefaultName;
     }
 
     public WorkspaceViewModel(string name)
     {
         Name = name;
+        WorkspaceCount++;
+        FileCollection.CollectionChanged += FileCollectionChanged;
+        FileCollection.Add("Eine Datei");
     }
 
-    public string Name { get; set; } = "";
+    private string name = "";
+    public string Name
+    {
+        get => name;
+        set => Checkset(ref name, value);
+    }
 
     public List<string> Files { get; set; } = [];
+
+    [JsonIgnore]
+    public ObservableCollection<string> FileCollection { get; set; } = [];
+
+    private int selectedFileIndex;
+    public int SelectedFileIndex
+    {
+        get => selectedFileIndex;
+        set => Checkset(ref selectedFileIndex, value);
+    }
 
     public string GetDirectory()
     {
@@ -55,6 +77,29 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
 
     public void Add(string fileName)
     {
-        Files.Add(fileName);
+        FileCollection.Add(fileName);
+    }
+
+    private void FileCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add
+            && e.NewItems != null && e.NewItems.Count == 1
+            && e.NewItems[0] is string newFileName)
+        {
+            Files.Add(newFileName);
+            return;
+        }
+
+        if (e.Action == NotifyCollectionChangedAction.Remove
+            && e.OldItems != null && e.OldItems.Count == 1
+            && e.OldItems[0] is string oldFileName)
+        {
+            Files.Remove(oldFileName);
+            return;
+        }
+    }
+
+    public void RemoveSelectedFile()
+    {
     }
 }
