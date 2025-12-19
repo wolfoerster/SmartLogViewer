@@ -17,6 +17,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -56,12 +57,17 @@ internal static class Helper
         if (!File.Exists(path))
             return new T();
 
-        var text = File.ReadAllText(path);
-        var obj = JsonConvert.DeserializeObject<T>(text);
-        if (obj == null)
+        try
+        {
+            var text = File.ReadAllText(path);
+            var obj = JsonConvert.DeserializeObject<T>(text);
+            return obj != null ? obj : new T();
+        }
+        catch (Exception ex)
+        {
+            Debug.Write(ex.ToString());
             return new T();
-
-        return obj;
+        }
     }
 
     public static Point ToPixel(this Point pointInDip, Visual visual)

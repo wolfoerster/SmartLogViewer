@@ -19,18 +19,38 @@
       <Setter Property="Foreground" Value="{Binding ColorTheme.Foreground}"/>
       <Setter Property="Width" Value="80"/>
     </Style>
+    <Style TargetType="ListBox" BasedOn="{StaticResource {x:Type ListBox}}">
+      <Setter Property="Background" Value="{Binding ColorTheme.Background}"/>
+      <Setter Property="Foreground" Value="{Binding ColorTheme.Foreground}"/>
+      <Setter Property="Width" Value="80"/>
+    </Style>
   </UserControl.Resources>
   <Grid Margin="4">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
     <StackPanel Orientation="Horizontal">
       <Button Content="Open" ToolTip="Open a log file" Click="OnOpenClick"/>
       <CheckBox Content="Dark mode" IsChecked="{Binding IsDarkMode}" Margin="12,0,0,0" VerticalAlignment="Center"/>
     </StackPanel>
-    <ListBox Grid.Row="1" Background="{Binding ColorTheme.Background}" Margin="0,4,0,0">
-
-    </ListBox>
+    <GroupBox Grid.Row="1" Header="Workspace" Padding="8,0">
+      <StackPanel Orientation="Vertical">
+        <ListBox ItemsSource="{Binding WorkspaceCollection}" SelectedIndex="{Binding SelectedWorkspaceIndex}" Width="Auto" Margin="0,8">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <Button Content="New workspace" Width="Auto" Margin="0,8"/>
+      </StackPanel>
+    </GroupBox>
   </Grid>
 </UserControl>

@@ -23,6 +23,20 @@ namespace SmartLogViewer.ViewModels;
 
 internal class WorkspaceViewModel : PropertyChangedNotifier
 {
+    public const string DefaultName = "Default";
+
+    public WorkspaceViewModel()
+    {
+        Name = DefaultName;
+    }
+
+    public WorkspaceViewModel(string name)
+    {
+        Name = name;
+    }
+
+    public string Name { get; set; } = "";
+
     public List<string> Files { get; set; } = [];
 
     public string GetDirectory()

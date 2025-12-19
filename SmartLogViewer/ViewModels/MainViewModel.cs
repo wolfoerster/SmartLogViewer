@@ -15,7 +15,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Media;
 using Microsoft.Win32;
@@ -28,7 +30,6 @@ namespace SmartLogViewer.ViewModels;
 
 internal class MainViewModel : PropertyChangedNotifier
 {
-    private const string Default = "Default";
     private static readonly SmartLogger Log = new();
 
     public ThemeViewModel ColorTheme { get; set; } = new();
@@ -40,9 +41,17 @@ internal class MainViewModel : PropertyChangedNotifier
         set => Checkset(ref isDarkMode, value, () => UpdateColorTheme());
     }
 
-    public string LastWorkspace { get; set; } = Default;
+    private int selectedWorkspaceIndex;
+    public int SelectedWorkspaceIndex
+    {
+        get => selectedWorkspaceIndex;
+        set => Checkset(ref selectedWorkspaceIndex, value);
+    }
 
-    public Dictionary<string, WorkspaceViewModel> Workspaces { get; set; } = [];
+    public List<WorkspaceViewModel> Workspaces { get; set; } = [];
+
+    [JsonIgnore]
+    public ObservableCollection<WorkspaceViewModel> WorkspaceCollection { get; set; } = [];
 
     [JsonIgnore]
     public WorkspaceViewModel CurrentWorkspace { get; set; } = new();
@@ -107,11 +116,12 @@ internal class MainViewModel : PropertyChangedNotifier
     private void InitWorkspaces()
     {
         if (Workspaces.Count == 0)
-            Workspaces.Add(Default, new WorkspaceViewModel());
+            Workspaces.Add(new WorkspaceViewModel());
 
-        if (!Workspaces.ContainsKey(LastWorkspace))
-            LastWorkspace = Default;
+        //for (int i = 0; i < 3; i++)
+          //  Workspaces.Add(new WorkspaceViewModel(Guid.NewGuid().ToString()));
 
-        CurrentWorkspace = Workspaces[LastWorkspace];
+        WorkspaceCollection = new ObservableCollection<WorkspaceViewModel>(Workspaces);
+        RaisePropertyChanged(nameof(SelectedWorkspaceIndex));
     }
 }
