@@ -19,8 +19,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
-using System.Linq;
-using System.Windows.Media;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using SmartLogging;
@@ -33,14 +31,41 @@ internal class MainViewModel : PropertyChangedNotifier
 {
     private static readonly SmartLogger Log = new();
 
-    public ThemeViewModel ColorTheme { get; set; } = new();
-
-    private bool isDarkMode;
-    public bool IsDarkMode
+    static MainViewModel()
     {
-        get => isDarkMode;
-        set => Checkset(ref isDarkMode, value, () => UpdateColorTheme());
+        ReadModes =
+        [
+            "All records",
+            "Last session",
+            "Last 24 hours",
+            "Last 8 hours",
+            "Last hour",
+        ];
+
+        LogLevels = 
+        [
+            "Verbose",
+            "Debug",
+            "Information",
+            "Warning",
+            "Error",
+            "Fatal",
+        ];
+
+        ThemeModes =
+        [
+            "Light",
+            "Dark",
+            "System",
+            "None",
+        ];
     }
+
+    public static List<string> ReadModes { get; set; } = [];
+
+    public static List<string> LogLevels { get; set; } = [];
+
+    public static List<string> ThemeModes { get; set; } = [];
 
     public List<WorkspaceViewModel> Workspaces { get; set; } = [];
 
@@ -59,7 +84,6 @@ internal class MainViewModel : PropertyChangedNotifier
 
     public void Initialize()
     {
-        UpdateColorTheme();
         InitWorkspaces();
     }
 
@@ -104,20 +128,6 @@ internal class MainViewModel : PropertyChangedNotifier
 
         SelectedWorkspace.Add(fileName);
         Log.Information($"File '{fileName}' opened");
-    }
-
-    private void UpdateColorTheme()
-    {
-        var index = isDarkMode ? 0 : 1;
-        ColorTheme.Background = CreateBrush(ThemeColors.Background[index]);
-        ColorTheme.Foreground = CreateBrush(ThemeColors.Foreground[index]);
-
-        static SolidColorBrush CreateBrush(Color color)
-        {
-            var brush = new SolidColorBrush(color);
-            brush.Freeze();
-            return brush;
-        }
     }
 
     private void InitWorkspaces()

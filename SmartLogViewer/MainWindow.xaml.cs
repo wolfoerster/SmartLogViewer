@@ -15,7 +15,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
@@ -23,14 +22,12 @@ using SmartLogging;
 using SmartLogViewer.Core;
 using SmartLogViewer.ViewModels;
 using SmartLogViewer.Views;
-using static SmartLogViewer.Core.Helper;
 
 namespace SmartLogViewer;
 
 public partial class MainWindow : Window
 {
     private static readonly SmartLogger Log = new();
-    private readonly WindowLocation Location;
 
     public MainWindow()
     {
@@ -38,7 +35,6 @@ public partial class MainWindow : Window
         InitializeComponent();
         Title = $"SmartLogViewer {App.Version.Major}.{App.Version.Minor}.{App.Version.Build}";
 
-        Location = Restore<WindowLocation>();
         Loaded += MeLoaded;
         Closing += MeClosing;
         RestoreSizeAndPosition();
@@ -54,7 +50,7 @@ public partial class MainWindow : Window
     private void MeLoaded(object sender, RoutedEventArgs e)
     {
         Log.Information();
-        if (Location.IsMaximized)
+        if (App.Settings.IsMaximized)
             WindowState = WindowState.Maximized;
     }
 
@@ -71,32 +67,32 @@ public partial class MainWindow : Window
 
     private void RestoreSizeAndPosition()
     {
-        var name = Location.ScreenName;
+        var name = App.Settings.ScreenName;
         var screen = Screen.LookUpByName(name);
         if (screen == null)
             return;
 
-        Top = Location.Top;
-        Left = Location.Left;
-        Width = Location.Width;
-        Height = Location.Height;
+        Top = App.Settings.Top;
+        Left = App.Settings.Left;
+        Width = App.Settings.Width;
+        Height = App.Settings.Height;
         WindowState = WindowState.Normal;
         WindowStartupLocation = WindowStartupLocation.Manual;
     }
 
     private void StoreSizeAndPosition()
     {
-        Location.IsMaximized = WindowState == WindowState.Maximized;
+        App.Settings.IsMaximized = WindowState == WindowState.Maximized;
         WindowState = WindowState.Normal;
 
         var pt = new Point(Left, Top).ToPixel(this);
         var screen = Screen.LookUpByPixel(pt);
-        Location.ScreenName = screen?.Name;
+        App.Settings.ScreenName = screen?.Name;
 
-        Location.Top = Top;
-        Location.Left = Left;
-        Location.Width = Width;
-        Location.Height = Height;
-        Location.Store();
+        App.Settings.Top = Top;
+        App.Settings.Left = Left;
+        App.Settings.Width = Width;
+        App.Settings.Height = Height;
+        App.Settings.Store();
     }
 }

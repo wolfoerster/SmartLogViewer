@@ -15,15 +15,26 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Windows.Media;
+using System.Windows;
+using SmartLogging;
 
 namespace SmartLogViewer.Core;
 
-internal static class ThemeColors
+public class AppSettings
 {
-    public static Color[] Background = [Colo(30, 30, 30), Colo(220, 220, 220)];
+    public double Left { get; set; }
 
-    public static Color[] Foreground = [Colo(220, 220, 220), Colo(30, 30, 30)];
+    public double Top { get; set; }
 
-    private static Color Colo(byte r, byte g, byte b) => Color.FromRgb(r, g, b);
+    public double Width { get; set; }
+
+    public double Height { get; set; }
+
+    public bool IsMaximized { get; set; }
+
+    public string? ScreenName { get; set; }
+
+    public ThemeMode ThemeMode { get; set; } = ThemeMode.System;
+
+    public LogLevel LogLevel { get; set; } = LogLevel.Information;
 }

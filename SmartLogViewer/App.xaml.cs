@@ -16,65 +16,40 @@
 //******************************************************************************************
 
 using System;
-using System.Configuration;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using SmartLogging;
+using SmartLogViewer.Core;
 
 namespace SmartLogViewer;
 
 public partial class App : Application
 {
-    private static readonly SmartLogger Log;
-
     static App()
     {
-        OverrideMetadata(ToolTipService.ShowDurationProperty, 30000);
-        OverrideMetadata(ToolTipService.ShowOnDisabledProperty, true);
+        ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(UIElement), new FrameworkPropertyMetadata(30000));
+        ToolTipService.ShowOnDisabledProperty.OverrideMetadata(typeof(UIElement), new FrameworkPropertyMetadata(true));
 
-        var assembly = Assembly.GetExecutingAssembly();
-        var name = assembly.GetName();
-        Version = name.Version ?? new Version(0, 0, 0);
+        var assemblyName = Assembly.GetExecutingAssembly().GetName();
+        Version = assemblyName?.Version ?? new Version(0, 0, 0);
+        Settings = Helper.Restore<AppSettings>();
 
         LogWriter.Init(new LogSettings 
         { 
             LogToFile = true, 
             MaxLogFileSize = 4 * 1024 * 1024,
-            MinimumLogLevel = GetMinimumLogLevel(),
+            MinimumLogLevel = Settings.LogLevel,
         });
-
-        Log = new SmartLogger();
-    }
-
-    protected override void OnStartup(StartupEventArgs e)
-    {
-        base.OnStartup(e);
-
-        //var theme = "PresentationFramework.Aero;V3.0.0.0;31bf3856ad364e35;component\\themes/aero.normalcolor.xaml";
-        //var theme = "/PresentationFramework.Classic;v3.0.0.0;31bf3856ad364e35;Component/themes/classic.xaml";
-        var theme = "/PresentationFramework.Royale;v3.0.0.0;31bf3856ad364e35;Component/themes/royale.normalcolor.xaml";
-        //var theme = "/PresentationFramework.Luna;v3.0.0.0;31bf3856ad364e35;Component/themes/luna.normalcolor.xaml";
-        //var theme = "/PresentationFramework.Luna;v3.0.0.0;31bf3856ad364e35;Component/themes/luna.homestead.xaml";
-        //var theme = "/PresentationFramework.Luna;v3.0.0.0;31bf3856ad364e35;Component/themes/luna.metallic.xaml";
-
-        var uri = new Uri(theme, UriKind.Relative);
-        Resources.MergedDictionaries.Add(LoadComponent(uri) as ResourceDictionary);
-        Log.Debug(new { theme });
     }
 
     public static Version Version { get; }
 
-    private static void OverrideMetadata(DependencyProperty property, object value)
-        => property.OverrideMetadata(typeof(UIElement), new FrameworkPropertyMetadata(value));
+    public static AppSettings Settings { get; }
 
-    private static LogLevel GetMinimumLogLevel()
+    protected override void OnStartup(StartupEventArgs e)
     {
-        var text = ConfigurationManager.AppSettings["MinimumLogLevel"];
-
-        if (Enum.TryParse(text, out LogLevel logLevel))
-            return logLevel;
-
-        return LogLevel.Information;
+        base.OnStartup(e);
+        ThemeMode = Settings.ThemeMode;
     }
 }
