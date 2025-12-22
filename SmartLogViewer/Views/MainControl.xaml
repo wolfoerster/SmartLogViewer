@@ -8,63 +8,76 @@
         d:DataContext="{d:DesignInstance Type=viewmos:MainViewModel}"
         TextElement.FontSize="12">
   <Grid Margin="4">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
-    </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto"/>
       <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
-    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="33" Margin="4">
+    <!--<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="33" Margin="4">
       <Button Content="Open File" Click="OnOpenClicked"/>
       <ComboBox Width="120" Margin="12,0,0,0" ItemsSource="{Binding ReadModes}" SelectedIndex="{Binding SelectedReadMode}" ToolTip="Select amount to read based on time stamp"/>
       <ComboBox Width="120" Margin="12,0,0,0" ItemsSource="{Binding LogLevels}" SelectedIndex="{Binding SelectedLogLevel}" ToolTip="Select amount to read based on log level"/>
       <ComboBox Width="120" Margin="12,0,0,0" ItemsSource="{Binding ThemeModes}" SelectedIndex="{Binding SelectedThemeMode}" ToolTip="Select overall appearance"/>
-    </StackPanel>
-    <GroupBox Grid.Row="1" Grid.Column="0" Header="Workspaces" Padding="8,0" MinWidth="120" MinHeight="300" Margin="4">
-      <DataGrid Padding="4"
-        ItemsSource="{Binding WorkspaceCollection}" 
-        SelectedIndex="{Binding SelectedWorkspaceIndex}"
-        AutoGenerateColumns="False"
-        HeadersVisibility="None"
-        CanUserAddRows="True"
-        Margin="0,8">
-        <DataGrid.Columns>
-          <DataGridTextColumn Binding="{Binding Name}"/>
-          <DataGridTemplateColumn>
-            <DataGridTemplateColumn.CellTemplate>
-              <DataTemplate>
-                <Grid>
-                  <Button Content="X" Width="14" Height="14" Click="OnRemoveWorkspace" HorizontalAlignment="Center"/>
-                </Grid>
-              </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-          </DataGridTemplateColumn>
-        </DataGrid.Columns>
-      </DataGrid>
+    </StackPanel>-->
+    <GroupBox Grid.Column="0" Header="Workspaces" Padding="4" MinWidth="200" MinHeight="300" Margin="4">
+      <Grid Margin="0,4,0,0">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+          <Button Content="Create"/>
+          <Button Content="Remove" Margin="4,0,0,0"/>
+        </StackPanel>
+        <ListView Grid.Row="1" Margin="0,4,0,0"
+          ItemsSource="{Binding WorkspaceCollection}" 
+          SelectedIndex="{Binding SelectedWorkspaceIndex}">
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+      </Grid>
     </GroupBox>
-    <GroupBox Grid.Row="1" Grid.Column="1" Header="Files" Padding="8,0" MinWidth="120" MinHeight="300" Margin="4">
-      <DataGrid Padding="4"
-        ItemsSource="{Binding SelectedWorkspace.FileCollection}" 
-        SelectedIndex="{Binding SelectedWorkspace.SelectedFileIndex}"
-        AutoGenerateColumns="False"
-        HeadersVisibility="None"
-        CanUserAddRows="False"
-        Margin="0,8">
-        <DataGrid.Columns>
-          <DataGridTextColumn Binding="{Binding}" IsReadOnly="True"/>
-          <DataGridTemplateColumn>
-            <DataGridTemplateColumn.CellTemplate>
-              <DataTemplate>
-                <Grid>
-                  <Button Content="X" Width="14" Height="14" Click="OnRemoveFile" HorizontalAlignment="Center"/>
-                </Grid>
-              </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-          </DataGridTemplateColumn>
-        </DataGrid.Columns>
-      </DataGrid>
+    <GroupBox Grid.Column="1" Header="Files" Padding="4" MinWidth="200" MinHeight="300" Margin="4">
+      <Grid Margin="0,4,0,0">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+          <Button Content="Open"/>
+          <Button Content="Close" Margin="4,0,0,0"/>
+        </StackPanel>
+        <ListView Grid.Row="1" Margin="0,4,0,0"
+          ItemsSource="{Binding SelectedWorkspace.FileCollection}" 
+          SelectedIndex="{Binding SelectedWorkspace.SelectedFileIndex}">
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding}"/>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+      </Grid>
+    </GroupBox>
+    <GroupBox Grid.Column="2" Header="Settings" Padding="8,0" MinWidth="200" MinHeight="300" Margin="4">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+      </Grid>
     </GroupBox>
   </Grid>
 </UserControl>
