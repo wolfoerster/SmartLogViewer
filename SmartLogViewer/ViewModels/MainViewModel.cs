@@ -64,7 +64,7 @@ internal class MainViewModel : PropertyChangedNotifier
             "Royal",
             "Normal",
             "Homestead",
-            "Mettalic",
+            "Metallic",
             "Classic",
         ];
     }

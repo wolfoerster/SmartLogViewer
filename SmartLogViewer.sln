@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLogViewer", "SmartLogV
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartLogViewer.Common", "SmartLogViewer.Common\SmartLogViewer.Common.csproj", "{F6379077-431D-43A4-9086-8D2DF464706F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Starter", "Starter\Starter.csproj", "{0BDADDD6-C782-453A-B6E8-E917C9F037BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F6379077-431D-43A4-9086-8D2DF464706F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6379077-431D-43A4-9086-8D2DF464706F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6379077-431D-43A4-9086-8D2DF464706F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BDADDD6-C782-453A-B6E8-E917C9F037BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BDADDD6-C782-453A-B6E8-E917C9F037BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BDADDD6-C782-453A-B6E8-E917C9F037BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BDADDD6-C782-453A-B6E8-E917C9F037BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

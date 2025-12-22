@@ -19,19 +19,16 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using SmartLogging;
 using SmartLogViewer.Core;
-using static System.IO.Path;
 
 namespace SmartLogViewer;
 
 public partial class App : Application
 {
     private static readonly SmartLogger Log;
-    private const string TEMP = ".tmp.dll";
 
     static App()
     {
@@ -53,39 +50,13 @@ public partial class App : Application
         Log.Information(new { Settings });
     }
 
-    public App()
-    {
-        var (dir, name) = GetExeInfo();
-        Log.Information($"Starting {Combine(dir, name)}");
-
-        if (name.EndsWith(TEMP))
-        {
-            name = name.Replace(TEMP, "");
-            var realFile = Path.Combine(dir, name);
-            Start(realFile);
-            Shutdown();
-        }
-        else
-        {
-            var tempFile = Path.Combine(dir, name + TEMP);
-            DeleteFile(tempFile);
-        }
-    }
-
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
         if (Settings.ThemeModeIndex < 4)
         {
-            Application.Current.ThemeMode = Settings.ThemeModeIndex switch
-            {
-                0 => ThemeMode.Light,
-                1 => ThemeMode.Dark,
-                2 => ThemeMode.System,
-                _ => ThemeMode.None,
-            };
-
+            Application.Current.ThemeMode = GetThemeMode();
             return;
         }
 
@@ -105,126 +76,33 @@ public partial class App : Application
         Resources.MergedDictionaries.Add(Application.LoadComponent(uri) as ResourceDictionary);
     }
 
+    private static ThemeMode GetThemeMode() => Settings.ThemeModeIndex switch
+    {
+        0 => ThemeMode.Light,
+        1 => ThemeMode.Dark,
+        2 => ThemeMode.System,
+        _ => ThemeMode.None,
+    };
+
     public static void UpdateThemeMode()
     {
-        Settings.Store();
-
-        var (dir, name) = GetExeInfo();
-        var tempFile = Path.Combine(dir, name + TEMP);
-        DeleteFile(tempFile);
-
-        if (CopyFile(Combine(dir, name), tempFile))
+        var msg = "You have to restart the application!\r\n\r\nRestart now?";
+        //var res = MessageBox.Show(msg, "Switching Theme", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        //if (res == MessageBoxResult.Yes)
         {
-            Start(tempFile);
-            Application.Current.Shutdown(0);
+            var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+            var starter = Path.Combine(dir, "Starter.exe");
+            using var process = new Process();
+            process.StartInfo.FileName = starter;
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.UseShellExecute = true;
+            process.Start();
+
+            Application.Current.Shutdown();
         }
     }
 
     public static Version Version { get; }
 
     public static AppSettings Settings { get; }
-
-    private static (string Directory, string Name) GetExeInfo()
-    {
-        var path = Assembly.GetExecutingAssembly().Location;
-        return (GetDirectoryName(path)!, GetFileName(path));
-    }
-
-    private static void Start(string path)
-    {
-        Log.Information($"About to start {path}");
-        using var process = new Process();
-        process.StartInfo.FileName = "dotnet.exe";
-        process.StartInfo.Arguments = $"{path}";
-        process.StartInfo.UseShellExecute = true;
-        process.Start();
-        Log.Information(new { process.HasExited });
-    }
-
-    private static bool CopyFile(string source, string dest)
-    {
-        Log.Information(new { source, dest });
-
-        while (true)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                if (TryCopyFile(source, dest))
-                {
-                    Log.Information("success");
-                    return true;
-                }
-
-                Thread.Sleep(60);
-            }
-
-            var msg = string.Format("could not copy file '{0}' to target '{1}'. Check if target is running. Try again?", source, dest);
-            var res = MessageBox.Show(msg, "Copy File Error", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (res != MessageBoxResult.Yes)
-                break;
-        }
-
-        Log.Information("cancelled");
-        return false;
-    }
-
-    private static bool TryCopyFile(string source, string dest)
-    {
-        try
-        {
-            File.Copy(source, dest, true);
-            return true;
-        }
-        catch (Exception e)
-        {
-            Log.Error(e.ToString());
-        }
-
-        return false;
-    }
-
-    private static bool DeleteFile(string path)
-    {
-        if (!File.Exists(path))
-            return true;
-
-        Log.Information(new { path });
-
-        while (true)
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                if (TryDeleteFile(path))
-                {
-                    Log.Information("success");
-                    return true;
-                }
-
-                Thread.Sleep(60);
-            }
-
-            string msg = string.Format("could not delete file '{0}'. Check if file is running. Try again?", path);
-            MessageBoxResult res = MessageBox.Show(msg, "Delete File Error", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (res != MessageBoxResult.Yes)
-                break;
-        }
-
-        Log.Information("cancelled");
-        return false;
-    }
-
-    private static bool TryDeleteFile(string path)
-    {
-        try
-        {
-            File.Delete(path);
-            return true;
-        }
-        catch (Exception e)
-        {
-            Log.Error(e.ToString());
-        }
-
-        return false;
-    }
 }
