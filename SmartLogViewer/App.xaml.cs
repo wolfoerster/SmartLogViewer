@@ -16,6 +16,7 @@
 //******************************************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,6 +27,14 @@ namespace SmartLogViewer;
 
 public partial class App : Application
 {
+    private static readonly Dictionary<int, ThemeMode> ThemeModes = new ()
+    {
+        {0, ThemeMode.Light },
+        {1, ThemeMode.Dark },
+        {2, ThemeMode.System },
+        {3, ThemeMode.None },
+    };
+
     static App()
     {
         ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(UIElement), new FrameworkPropertyMetadata(30000));
@@ -50,6 +59,11 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-        ThemeMode = ThemeMode.Dark;// Settings.ThemeMode;
+        UpdateThemeMode();
+    }
+
+    public static void UpdateThemeMode()
+    {
+        Application.Current.ThemeMode = ThemeModes[Settings.ThemeModeIndex];
     }
 }

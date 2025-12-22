@@ -15,26 +15,25 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Windows;
 using SmartLogging;
 
 namespace SmartLogViewer.Core;
 
 public class AppSettings
 {
-    public double Left { get; set; }
+    public double Left;
 
-    public double Top { get; set; }
+    public double Top;
 
-    public double Width { get; set; }
+    public double Width;
 
-    public double Height { get; set; }
+    public double Height;
 
-    public bool IsMaximized { get; set; }
+    public bool IsMaximized;
 
-    public string? ScreenName { get; set; }
+    public string? ScreenName;
 
-    public ThemeMode ThemeMode { get; set; } = ThemeMode.System;
+    public int ThemeModeIndex;
 
-    public LogLevel LogLevel { get; set; } = LogLevel.Information;
+    public LogLevel LogLevel = LogLevel.Information;
 }

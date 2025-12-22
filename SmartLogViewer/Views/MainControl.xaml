@@ -7,6 +7,11 @@
              mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance Type=viewmos:MainViewModel}"
         TextElement.FontSize="12">
+  <UserControl.Resources>
+    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+  </UserControl.Resources>
   <Grid Margin="4">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto"/>
@@ -75,8 +80,11 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="8"/>
           <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Text="Color theme:"/>
+        <ComboBox Grid.Row="0" Grid.Column="2" ItemsSource="{Binding ThemeModes}" SelectedIndex="{Binding ThemeModeIndex}"/>
       </Grid>
     </GroupBox>
   </Grid>

@@ -15,10 +15,12 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
+using System.Windows;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using SmartLogging;
@@ -66,6 +68,12 @@ internal class MainViewModel : PropertyChangedNotifier
     public static List<string> LogLevels { get; set; } = [];
 
     public static List<string> ThemeModes { get; set; } = [];
+
+    public int ThemeModeIndex
+    {
+        get => App.Settings.ThemeModeIndex;
+        set => Checkset(ref App.Settings.ThemeModeIndex, value, () => App.UpdateThemeMode());
+    }
 
     public List<WorkspaceViewModel> Workspaces { get; set; } = [];
 
