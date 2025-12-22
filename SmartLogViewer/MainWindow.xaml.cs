@@ -70,7 +70,12 @@ public partial class MainWindow : Window
         var name = App.Settings.ScreenName;
         var screen = Screen.LookUpByName(name);
         if (screen == null)
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            Width = 800;
+            Height = 500;
             return;
+        }
 
         Top = App.Settings.Top;
         Left = App.Settings.Left;

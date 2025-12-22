@@ -60,6 +60,12 @@ internal class MainViewModel : PropertyChangedNotifier
             "Dark",
             "System",
             "None",
+            "Aero",
+            "Royal",
+            "Normal",
+            "Homestead",
+            "Mettalic",
+            "Classic",
         ];
     }
 
