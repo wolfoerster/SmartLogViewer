@@ -17,7 +17,7 @@
 
 using SmartLogging;
 
-namespace SmartLogViewer.Core;
+namespace SmartLogViewer.Models;
 
 public class AppSettings
 {

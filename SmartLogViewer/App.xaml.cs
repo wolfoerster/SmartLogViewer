@@ -23,6 +23,7 @@ using System.Windows;
 using System.Windows.Controls;
 using SmartLogging;
 using SmartLogViewer.Core;
+using SmartLogViewer.Models;
 
 namespace SmartLogViewer;
 
@@ -86,7 +87,7 @@ public partial class App : Application
 
     public static void UpdateThemeMode()
     {
-        var msg = "You have to restart the application!\r\n\r\nRestart now?";
+        //var msg = "You have to restart the application!\r\n\r\nRestart now?";
         //var res = MessageBox.Show(msg, "Switching Theme", MessageBoxButton.YesNo, MessageBoxImage.Question);
         //if (res == MessageBoxResult.Yes)
         {
