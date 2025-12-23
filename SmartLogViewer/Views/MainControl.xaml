@@ -41,7 +41,7 @@
         </StackPanel>
         <ListView Grid.Row="1" Margin="0,4,0,0"
           ItemsSource="{Binding Workspaces}" 
-          SelectedIndex="{Binding WorkspaceIndex}">
+          SelectedIndex="{Binding SelectedWorkspaceIndex}">
           <ListView.ItemTemplate>
             <DataTemplate>
               <TextBlock Text="{Binding Name}"/>
@@ -62,7 +62,7 @@
         </StackPanel>
         <ListView Grid.Row="1" Margin="0,4,0,0"
           ItemsSource="{Binding SelectedWorkspace.Files}" 
-          SelectedIndex="{Binding SelectedWorkspace.FileIndex}">
+          SelectedIndex="{Binding SelectedWorkspace.SelectedFileIndex}">
           <ListView.ItemTemplate>
             <DataTemplate>
               <TextBlock Text="{Binding}"/>

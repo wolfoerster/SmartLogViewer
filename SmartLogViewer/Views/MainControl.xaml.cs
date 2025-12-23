@@ -48,7 +48,7 @@ public partial class MainControl : UserControl
 
     public void CanRemoveWorkspace(object sender, CanExecuteRoutedEventArgs e)
     {
-        var isValidIndex = ViewModel.WorkspaceIndex.IsValidIndex(ViewModel.Workspaces);
+        var isValidIndex = ViewModel.SelectedWorkspaceIndex.IsValidIndex(ViewModel.Workspaces);
         e.CanExecute = isValidIndex && ViewModel.Workspaces.Count > 1;
     }
 

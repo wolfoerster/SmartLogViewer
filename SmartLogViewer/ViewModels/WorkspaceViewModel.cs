@@ -45,10 +45,10 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
 
     public ObservableCollection<string> Files { get; set; } = [];
 
-    public int FileIndex
+    public int SelectedFileIndex
     {
-        get => model.FileIndex;
-        set => Checkset(ref model.FileIndex, value);
+        get => model.SelectedFileIndex;
+        set => Checkset(ref model.SelectedFileIndex, value);
     }
 
     public string GetDirectory()

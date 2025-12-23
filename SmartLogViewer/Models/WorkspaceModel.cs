@@ -25,5 +25,5 @@ internal class WorkspaceModel
 
     public List<string> Files = [];
 
-    public int FileIndex;
+    public int SelectedFileIndex;
 }

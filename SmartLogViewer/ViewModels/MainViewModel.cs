@@ -93,10 +93,10 @@ internal class MainViewModel : PropertyChangedNotifier
 
     public ObservableCollection<WorkspaceViewModel> Workspaces { get; set; } = [];
 
-    public int WorkspaceIndex
+    public int SelectedWorkspaceIndex
     {
-        get => model.WorkspaceIndex;
-        set => Checkset(ref model.WorkspaceIndex, value);
+        get => model.SelectedWorkspaceIndex;
+        set => Checkset(ref model.SelectedWorkspaceIndex, value);
     }
 
     public WorkspaceViewModel SelectedWorkspace { get; set; } = new WorkspaceModel();
@@ -119,9 +119,9 @@ internal class MainViewModel : PropertyChangedNotifier
 
     public void DoRemoveWorkspace()
     {
-        var newIndex = Math.Max(0, WorkspaceIndex - 1);
-        Workspaces.RemoveAt(WorkspaceIndex);
-        WorkspaceIndex = newIndex;
+        var newIndex = Math.Max(0, SelectedWorkspaceIndex - 1);
+        Workspaces.RemoveAt(SelectedWorkspaceIndex);
+        SelectedWorkspaceIndex = newIndex;
     }
 
     public void OpenFileInteractive()
@@ -164,7 +164,7 @@ internal class MainViewModel : PropertyChangedNotifier
             Workspaces.Add(model.Workspaces[i]);
 
         Workspaces.CollectionChanged += WorkspacesCollectionChanged;
-        RaisePropertyChanged(nameof(WorkspaceIndex));
+        RaisePropertyChanged(nameof(SelectedWorkspaceIndex));
     }
 
     private void WorkspacesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
