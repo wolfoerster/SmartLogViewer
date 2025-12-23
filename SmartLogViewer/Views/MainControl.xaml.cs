@@ -47,7 +47,7 @@ public partial class MainControl : UserControl
         {
             if (e.NewValue is int newValue && newValue == -1)
             {
-                if (e.OldValue is int oldValue)
+                if (e.OldValue is int oldValue && oldValue < ViewModel.Workspaces.Count)
                 {
                     var timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(10) };
 
