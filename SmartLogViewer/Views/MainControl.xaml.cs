@@ -15,8 +15,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
+using System;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using SmartLogging;
 using SmartLogViewer.ViewModels;
 using SmartLogViewer.ViewModels.Basics;
@@ -43,10 +45,21 @@ public partial class MainControl : UserControl
     {
         if (e.PropertyName == nameof(MainViewModel.SelectedWorkspaceIndex))
         {
-            if (e.NewValue != null && (int)e.NewValue == -1)
-                e.Cancel();
+            if (e.NewValue is int newValue && newValue == -1)
+            {
+                if (e.OldValue is int oldValue)
+                {
+                    var timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(10) };
 
-            return;
+                    timer.Tick += (s, e) =>
+                    {
+                        timer.Stop();
+                        ViewModel.SelectedWorkspaceIndex = oldValue;
+                    };
+
+                    timer.Start();
+                }
+            }
         }
     }
 

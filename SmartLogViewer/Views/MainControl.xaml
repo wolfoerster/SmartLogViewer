@@ -41,7 +41,7 @@
           <Button Command="{Binding CreateWorkspace}" Content="{Binding CreateWorkspace.Name}" ToolTip="{Binding CreateWorkspace.Text}"/>
           <Button Command="{Binding RemoveWorkspace}" Content="{Binding RemoveWorkspace.Name}" ToolTip="{Binding RemoveWorkspace.Text}" Margin="4,0,0,0"/>
         </StackPanel>
-        <ListView Grid.Row="1" Margin="0,4,0,0"
+        <ListView Grid.Row="1" Margin="0,4,0,0" SelectionMode="Single"
           ItemsSource="{Binding Workspaces}" 
           SelectedIndex="{Binding SelectedWorkspaceIndex}">
           <ListView.ItemTemplate>
@@ -62,7 +62,7 @@
           <Button Command="{Binding OpenFile}" Content="{Binding OpenFile.Name}" ToolTip="{Binding OpenFile.Text}"/>
           <Button Command="{Binding CloseFile}" Content="{Binding CloseFile.Name}" ToolTip="{Binding CloseFile.Text}" Margin="4,0,0,0"/>
         </StackPanel>
-        <ListView Grid.Row="1" Margin="0,4,0,0"
+        <ListView Grid.Row="1" Margin="0,4,0,0" SelectionMode="Single"
           ItemsSource="{Binding SelectedWorkspace.Files}" 
           SelectedIndex="{Binding SelectedWorkspace.SelectedFileIndex}">
           <ListView.ItemTemplate>

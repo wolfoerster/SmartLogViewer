@@ -156,7 +156,10 @@ internal class MainViewModel : PropertyChangedNotifier
 
     private void OnSelectedWorkspaceIndexChanged()
     {
-        SelectedWorkspace = Workspaces[SelectedWorkspaceIndex];
-        RaisePropertyChanged(nameof(SelectedWorkspace));
+        if (SelectedWorkspaceIndex >= 0)
+        {
+            SelectedWorkspace = Workspaces[SelectedWorkspaceIndex];
+            RaisePropertyChanged(nameof(SelectedWorkspace));
+        }
     }
 }
