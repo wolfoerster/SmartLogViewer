@@ -118,7 +118,7 @@ internal class MainViewModel : PropertyChangedNotifier
     public int SelectedWorkspaceIndex
     {
         get => model.SelectedWorkspaceIndex;
-        set => Checkset(ref model.SelectedWorkspaceIndex, value, () => SelectedWorkspace = Workspaces[SelectedWorkspaceIndex]);
+        set => Checkset(ref model.SelectedWorkspaceIndex, value, () => OnSelectedWorkspaceIndexChanged());
     }
 
     public WorkspaceViewModel SelectedWorkspace { get; set; }
@@ -152,5 +152,11 @@ internal class MainViewModel : PropertyChangedNotifier
             model.Workspaces.Remove(oldWorkspace.Model);
             return;
         }
+    }
+
+    private void OnSelectedWorkspaceIndexChanged()
+    {
+        SelectedWorkspace = Workspaces[SelectedWorkspaceIndex];
+        RaisePropertyChanged(nameof(SelectedWorkspace));
     }
 }
