@@ -22,7 +22,6 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Windows.Input;
 using Microsoft.Win32;
-using Newtonsoft.Json;
 using SmartLogging;
 using SmartLogViewer.Core;
 using SmartLogViewer.Models;
@@ -76,6 +75,10 @@ internal class MainViewModel : PropertyChangedNotifier
         this.model = model;
     }
 
+    public static RoutedUICommand CreateWorkspace => Commands.CreateWorkspace;
+
+    public static RoutedUICommand RemoveWorkspace => Commands.RemoveWorkspace;
+
     public static List<string> ReadModes { get; set; } = [];
 
     public static List<string> LogLevels { get; set; } = [];
@@ -96,9 +99,7 @@ internal class MainViewModel : PropertyChangedNotifier
         set => Checkset(ref model.WorkspaceIndex, value);
     }
 
-    public WorkspaceViewModel SelectedWorkspace { get; set; } = new(new WorkspaceModel());
-
-    public bool CanRemoveWorkspace => Workspaces.Count > 1;
+    public WorkspaceViewModel SelectedWorkspace { get; set; } = new WorkspaceModel();
 
     public void Initialize()
     {
@@ -111,21 +112,16 @@ internal class MainViewModel : PropertyChangedNotifier
         this.Store();
     }
 
-    public void CreateWorkspace()
+    public void DoCreateWorkspace()
     {
         Workspaces.Add(new WorkspaceModel { Name = $"Workspace {Workspaces.Count + 1}" });
-        RaisePropertyChanged(nameof(CanRemoveWorkspace));
     }
 
-    public void RemoveSelectedWorkspace()
+    public void DoRemoveWorkspace()
     {
-        if (WorkspaceIndex.IsValidIndex(Workspaces) && CanRemoveWorkspace)
-        {
-            var newIndex = Math.Max(0, WorkspaceIndex - 1);
-            Workspaces.RemoveAt(WorkspaceIndex);
-            WorkspaceIndex = newIndex;
-            RaisePropertyChanged(nameof(CanRemoveWorkspace));
-        }
+        var newIndex = Math.Max(0, WorkspaceIndex - 1);
+        Workspaces.RemoveAt(WorkspaceIndex);
+        WorkspaceIndex = newIndex;
     }
 
     public void OpenFileInteractive()

@@ -14,7 +14,8 @@
     </Style>
   </UserControl.Resources>
   <UserControl.CommandBindings>
-    <CommandBinding Command="core:Commands.CreateWorkspaceCmd" Executed="ExecuteCreateWorkspaceCmd" CanExecute="CanExecuteCreateWorkspaceCmd" />
+    <CommandBinding Command="core:Commands.CreateWorkspace" Executed="DoCreateWorkspace"/>
+    <CommandBinding Command="core:Commands.RemoveWorkspace" Executed="DoRemoveWorkspace" CanExecute="CanRemoveWorkspace"/>
   </UserControl.CommandBindings>
   <Grid Margin="4">
     <Grid.ColumnDefinitions>
@@ -35,9 +36,8 @@
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-          <!--<Button Content="Create" Click="OnCreateClicked"/>-->
-          <Button Content="Create" Command="core:Commands.CreateWorkspaceCmd"/>
-          <Button Content="Remove" Click="OnRemoveClicked" Margin="4,0,0,0" IsEnabled="{Binding CanRemoveWorkspace}"/>
+          <Button Command="{Binding CreateWorkspace}" Content="{Binding CreateWorkspace.Name}" ToolTip="{Binding CreateWorkspace.Text}"/>
+          <Button Command="{Binding RemoveWorkspace}" Content="{Binding RemoveWorkspace.Name}" ToolTip="{Binding RemoveWorkspace.Text}" Margin="4,0,0,0"/>
         </StackPanel>
         <ListView Grid.Row="1" Margin="0,4,0,0"
           ItemsSource="{Binding Workspaces}" 

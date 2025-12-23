@@ -33,30 +33,28 @@ public partial class MainControl : UserControl
     public MainControl()
     {
         Log.Information();
-        InitializeComponent();
-
         ViewModel = new MainViewModel(Restore<MainModel>());
         ViewModel.Initialize();
+
+        InitializeComponent();
+
         DataContext = ViewModel;
     }
 
-    public void CanExecuteCreateWorkspaceCmd(object sender, CanExecuteRoutedEventArgs e)
+    public void DoCreateWorkspace(object sender, ExecutedRoutedEventArgs e)
     {
-        e.CanExecute = true;
+        ViewModel.DoCreateWorkspace();
     }
 
-    public void ExecuteCreateWorkspaceCmd(object sender, ExecutedRoutedEventArgs e)
+    public void CanRemoveWorkspace(object sender, CanExecuteRoutedEventArgs e)
     {
+        var isValidIndex = ViewModel.WorkspaceIndex.IsValidIndex(ViewModel.Workspaces);
+        e.CanExecute = isValidIndex && ViewModel.Workspaces.Count > 1;
     }
 
-    private void OnCreateClicked(object sender, RoutedEventArgs e)
+    public void DoRemoveWorkspace(object sender, ExecutedRoutedEventArgs e)
     {
-        ViewModel.CreateWorkspace();
-    }
-
-    private void OnRemoveClicked(object sender, RoutedEventArgs e)
-    {
-        ViewModel.RemoveSelectedWorkspace();
+        ViewModel.DoRemoveWorkspace();
     }
 
     private void OnOpenClicked(object sender, RoutedEventArgs e)

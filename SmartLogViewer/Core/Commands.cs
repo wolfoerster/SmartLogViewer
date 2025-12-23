@@ -23,8 +23,11 @@ namespace SmartLogViewer.Core;
 
 internal static class Commands
 {
-    public static RoutedUICommand CreateWorkspaceCmd =
-        CreateCommand("Create", "Create workspace (Ctrl+Enter)", Key.Return, ModifierKeys.Control, "Ctrl+Return");
+    public static RoutedUICommand CreateWorkspace =
+        CreateCommand("Create", "Create workspace (Ctrl+W)", Key.W, ModifierKeys.Control, "Ctrl+W");
+
+    public static RoutedUICommand RemoveWorkspace = 
+        CreateCommand("Remove", "Remove workspace (Ctrl+R)", Key.R, ModifierKeys.Control, "Ctrl+R");
 
     private static RoutedUICommand CreateCommand(string name, string description, Key key, ModifierKeys modifier, string str)
         => CreateCommand(name, description, new KeyGesture(key, modifier, str));
