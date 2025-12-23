@@ -18,9 +18,8 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using SmartLogging;
-using SmartLogViewer.Models;
 using SmartLogViewer.ViewModels;
-using static SmartLogViewer.Core.Helper;
+using SmartLogViewer.ViewModels.Basics;
 
 namespace SmartLogViewer.Views;
 
@@ -32,13 +31,23 @@ public partial class MainControl : UserControl
     public MainControl()
     {
         Log.Information();
-
-        ViewModel = new MainViewModel(Restore<MainModel>());
-        ViewModel.Initialize();
+        ViewModel = new MainViewModel();
+        ViewModel.PropertyChangedPreview += ViewModelPropertyChangedPreview;
 
         InitializeComponent();
 
         DataContext = ViewModel;
+    }
+
+    private void ViewModelPropertyChangedPreview(object? sender, PropertyChangedPreviewEventArgs e)
+    {
+        if (e.PropertyName == nameof(MainViewModel.SelectedWorkspaceIndex))
+        {
+            if (e.NewValue != null && (int)e.NewValue == -1)
+                e.Cancel();
+
+            return;
+        }
     }
 
     public void DoCreateWorkspace(object sender, ExecutedRoutedEventArgs e)
@@ -48,8 +57,7 @@ public partial class MainControl : UserControl
 
     public void CanRemoveWorkspace(object sender, CanExecuteRoutedEventArgs e)
     {
-        var isValidIndex = ViewModel.SelectedWorkspaceIndex >= 0;
-        e.CanExecute = isValidIndex && ViewModel.Workspaces.Count > 1;
+        e.CanExecute = ViewModel.Workspaces.Count > 1;
     }
 
     public void DoRemoveWorkspace(object sender, ExecutedRoutedEventArgs e)

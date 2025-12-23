@@ -27,5 +27,5 @@ internal class MainModel
 
     public List<WorkspaceModel> Workspaces = [];
 
-    public int SelectedWorkspaceIndex;
+    public int SelectedWorkspaceIndex = -1;
 }

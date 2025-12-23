@@ -71,7 +71,6 @@ public class PropertyChangedNotifier : INotifyPropertyChanged, INotifyPropertyCh
         {
             if (RaisePropertyChangedPreview(backingField, newValue, propertyName))
             {
-
                 backingField = newValue;
                 RaisePropertyChanged(propertyName);
                 return true;

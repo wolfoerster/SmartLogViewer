@@ -34,10 +34,19 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
     public WorkspaceViewModel(WorkspaceModel model)
     {
         this.model = model;
+
+        foreach (var file in model.Files)
+            Files.Add(file);
+
         Files.CollectionChanged += FilesCollectionChanged;
     }
 
     public static implicit operator WorkspaceViewModel(WorkspaceModel model) => new(model);
+
+    public override string ToString()
+    {
+        return $"{model}";
+    }
 
     public WorkspaceModel Model => model;
 

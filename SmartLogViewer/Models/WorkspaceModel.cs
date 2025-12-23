@@ -25,5 +25,10 @@ internal class WorkspaceModel
 
     public List<string> Files = [];
 
-    public int SelectedFileIndex;
+    public int SelectedFileIndex = -1;
+
+    public override string ToString()
+    {
+        return $"{Name}, {Files.Count}, {SelectedFileIndex}";
+    }
 }
