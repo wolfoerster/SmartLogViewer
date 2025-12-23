@@ -16,6 +16,7 @@
 //******************************************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -28,6 +29,9 @@ namespace SmartLogViewer.Core;
 
 internal static class Helper
 {
+    public static bool IsValidIndex(this int index, IList collection)
+        => index >= 0 && index < collection.Count;
+
     public static RoutedUICommand CreateCommand(string name, string description, Key key, ModifierKeys modifier, string str)
         => CreateCommand(name, description, new KeyGesture(key, modifier, str));
 

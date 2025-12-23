@@ -15,10 +15,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Newtonsoft.Json;
+using SmartLogViewer.Models;
 using SmartLogViewer.ViewModels.Basics;
 using static System.IO.Path;
 
@@ -26,38 +25,30 @@ namespace SmartLogViewer.ViewModels;
 
 internal class WorkspaceViewModel : PropertyChangedNotifier
 {
-    public static uint WorkspaceCount;
+    private readonly WorkspaceModel model;
 
-    public WorkspaceViewModel()
-        : this($"New workspace {WorkspaceCount}")
+    public WorkspaceViewModel(WorkspaceModel model)
     {
+        this.model = model;
+        Files.CollectionChanged += FilesCollectionChanged;
     }
 
-    public WorkspaceViewModel(string name)
-    {
-        Name = name;
-        WorkspaceCount++;
-        FileCollection.CollectionChanged += FileCollectionChanged;
-        FileCollection.Add("Eine Datei");
-    }
+    public static implicit operator WorkspaceViewModel(WorkspaceModel model) => new(model);
 
-    private string name = "";
+    public WorkspaceModel Model => model;
+
     public string Name
     {
-        get => name;
-        set => Checkset(ref name, value);
+        get => model.Name;
+        set => Checkset(ref model.Name, value);
     }
 
-    public List<string> Files { get; set; } = [];
+    public ObservableCollection<string> Files { get; set; } = [];
 
-    [JsonIgnore]
-    public ObservableCollection<string> FileCollection { get; set; } = [];
-
-    private int selectedFileIndex;
-    public int SelectedFileIndex
+    public int FileIndex
     {
-        get => selectedFileIndex;
-        set => Checkset(ref selectedFileIndex, value);
+        get => model.FileIndex;
+        set => Checkset(ref model.FileIndex, value);
     }
 
     public string GetDirectory()
@@ -76,16 +67,16 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
 
     public void Add(string fileName)
     {
-        FileCollection.Add(fileName);
+        Files.Add(fileName);
     }
 
-    private void FileCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void FilesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Add
             && e.NewItems != null && e.NewItems.Count == 1
             && e.NewItems[0] is string newFileName)
         {
-            Files.Add(newFileName);
+            model.Files.Add(newFileName);
             return;
         }
 
@@ -93,7 +84,7 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
             && e.OldItems != null && e.OldItems.Count == 1
             && e.OldItems[0] is string oldFileName)
         {
-            Files.Remove(oldFileName);
+            model.Files.Remove(oldFileName);
             return;
         }
     }

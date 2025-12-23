@@ -18,6 +18,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using SmartLogging;
+using SmartLogViewer.Models;
 using SmartLogViewer.ViewModels;
 using static SmartLogViewer.Core.Helper;
 
@@ -33,19 +34,24 @@ namespace SmartLogViewer.Views
             Log.Information();
             InitializeComponent();
 
-            ViewModel = Restore<MainViewModel>();
+            ViewModel = new MainViewModel(Restore<MainModel>());
             ViewModel.Initialize();
             DataContext = ViewModel;
+        }
+
+        private void OnCreateClicked(object sender, RoutedEventArgs e)
+        {
+            ViewModel.CreateWorkspace();
+        }
+
+        private void OnRemoveClicked(object sender, RoutedEventArgs e)
+        {
+            ViewModel.RemoveSelectedWorkspace();
         }
 
         private void OnOpenClicked(object sender, RoutedEventArgs e)
         {
             ViewModel.OpenFileInteractive();
-        }
-
-        private void OnRemoveWorkspace(object sender, RoutedEventArgs e)
-        {
-            ViewModel.RemoveSelectedWorkspace();
         }
 
         private void OnRemoveFile(object sender, RoutedEventArgs e)

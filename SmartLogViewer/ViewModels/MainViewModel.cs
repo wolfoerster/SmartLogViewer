@@ -15,6 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -23,6 +24,7 @@ using Microsoft.Win32;
 using Newtonsoft.Json;
 using SmartLogging;
 using SmartLogViewer.Core;
+using SmartLogViewer.Models;
 using SmartLogViewer.ViewModels.Basics;
 
 namespace SmartLogViewer.ViewModels;
@@ -30,6 +32,7 @@ namespace SmartLogViewer.ViewModels;
 internal class MainViewModel : PropertyChangedNotifier
 {
     private static readonly SmartLogger Log = new();
+    private readonly MainModel model;
 
     static MainViewModel()
     {
@@ -67,6 +70,11 @@ internal class MainViewModel : PropertyChangedNotifier
         ];
     }
 
+    public MainViewModel(MainModel model)
+    {
+        this.model = model;
+    }
+
     public static List<string> ReadModes { get; set; } = [];
 
     public static List<string> LogLevels { get; set; } = [];
@@ -79,20 +87,17 @@ internal class MainViewModel : PropertyChangedNotifier
         set => Checkset(ref App.Settings.ThemeModeIndex, value, () => App.UpdateThemeMode());
     }
 
-    public List<WorkspaceViewModel> Workspaces { get; set; } = [];
+    public ObservableCollection<WorkspaceViewModel> Workspaces { get; set; } = [];
 
-    [JsonIgnore]
-    public ObservableCollection<WorkspaceViewModel> WorkspaceCollection { get; set; } = [];
-
-    private int selectedWorkspaceIndex;
-    public int SelectedWorkspaceIndex
+    public int WorkspaceIndex
     {
-        get => selectedWorkspaceIndex;
-        set => Checkset(ref selectedWorkspaceIndex, value);
+        get => model.WorkspaceIndex;
+        set => Checkset(ref model.WorkspaceIndex, value);
     }
 
-    [JsonIgnore]
-    public WorkspaceViewModel SelectedWorkspace { get; set; } = new();
+    public WorkspaceViewModel SelectedWorkspace { get; set; } = new(new WorkspaceModel());
+
+    public bool CanRemoveWorkspace => Workspaces.Count > 1;
 
     public void Initialize()
     {
@@ -105,10 +110,21 @@ internal class MainViewModel : PropertyChangedNotifier
         this.Store();
     }
 
+    public void CreateWorkspace()
+    {
+        Workspaces.Add(new WorkspaceModel { Name = $"Workspace {Workspaces.Count + 1}" });
+        RaisePropertyChanged(nameof(CanRemoveWorkspace));
+    }
+
     public void RemoveSelectedWorkspace()
     {
-        if (SelectedWorkspaceIndex > 0 && SelectedWorkspaceIndex < WorkspaceCollection.Count)
-            WorkspaceCollection.RemoveAt(SelectedWorkspaceIndex);
+        if (WorkspaceIndex.IsValidIndex(Workspaces) && CanRemoveWorkspace)
+        {
+            var newIndex = Math.Max(0, WorkspaceIndex - 1);
+            Workspaces.RemoveAt(WorkspaceIndex);
+            WorkspaceIndex = newIndex;
+            RaisePropertyChanged(nameof(CanRemoveWorkspace));
+        }
     }
 
     public void OpenFileInteractive()
@@ -144,24 +160,23 @@ internal class MainViewModel : PropertyChangedNotifier
 
     private void InitWorkspaces()
     {
-        if (Workspaces.Count == 0)
-            Workspaces.Add(new WorkspaceViewModel());
+        if (model.Workspaces.Count == 0)
+            model.Workspaces.Add(new WorkspaceModel { Name = "Workspace 1" });
 
-        for (int i = 0; i < Workspaces.Count; i++)
-            WorkspaceCollection.Add(Workspaces[i]);
+        for (int i = 0; i < model.Workspaces.Count; i++)
+            Workspaces.Add(model.Workspaces[i]);
 
-        WorkspaceCollection.CollectionChanged += WorkspaceCollectionChanged;
-
-        RaisePropertyChanged(nameof(SelectedWorkspaceIndex));
+        Workspaces.CollectionChanged += WorkspacesCollectionChanged;
+        RaisePropertyChanged(nameof(WorkspaceIndex));
     }
 
-    private void WorkspaceCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void WorkspacesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Add
             && e.NewItems != null && e.NewItems.Count == 1
             && e.NewItems[0] is WorkspaceViewModel newWorkspace)
         {
-            Workspaces.Add(newWorkspace);
+            model.Workspaces.Add(newWorkspace.Model);
             return;
         }
 
@@ -169,7 +184,7 @@ internal class MainViewModel : PropertyChangedNotifier
             && e.OldItems != null && e.OldItems.Count == 1
             && e.OldItems[0] is WorkspaceViewModel oldWorkspace)
         {
-            Workspaces.Remove(oldWorkspace);
+            model.Workspaces.Remove(oldWorkspace.Model);
             return;
         }
     }
