@@ -17,46 +17,55 @@
 
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using SmartLogging;
 using SmartLogViewer.Models;
 using SmartLogViewer.ViewModels;
 using static SmartLogViewer.Core.Helper;
 
-namespace SmartLogViewer.Views
+namespace SmartLogViewer.Views;
+
+public partial class MainControl : UserControl
 {
-    public partial class MainControl : UserControl
+    private static readonly SmartLogger Log = new();
+    private readonly MainViewModel ViewModel;
+
+    public MainControl()
     {
-        private static readonly SmartLogger Log = new();
-        private readonly MainViewModel ViewModel;
+        Log.Information();
+        InitializeComponent();
 
-        public MainControl()
-        {
-            Log.Information();
-            InitializeComponent();
+        ViewModel = new MainViewModel(Restore<MainModel>());
+        ViewModel.Initialize();
+        DataContext = ViewModel;
+    }
 
-            ViewModel = new MainViewModel(Restore<MainModel>());
-            ViewModel.Initialize();
-            DataContext = ViewModel;
-        }
+    public void CanExecuteCreateWorkspaceCmd(object sender, CanExecuteRoutedEventArgs e)
+    {
+        e.CanExecute = true;
+    }
 
-        private void OnCreateClicked(object sender, RoutedEventArgs e)
-        {
-            ViewModel.CreateWorkspace();
-        }
+    public void ExecuteCreateWorkspaceCmd(object sender, ExecutedRoutedEventArgs e)
+    {
+    }
 
-        private void OnRemoveClicked(object sender, RoutedEventArgs e)
-        {
-            ViewModel.RemoveSelectedWorkspace();
-        }
+    private void OnCreateClicked(object sender, RoutedEventArgs e)
+    {
+        ViewModel.CreateWorkspace();
+    }
 
-        private void OnOpenClicked(object sender, RoutedEventArgs e)
-        {
-            ViewModel.OpenFileInteractive();
-        }
+    private void OnRemoveClicked(object sender, RoutedEventArgs e)
+    {
+        ViewModel.RemoveSelectedWorkspace();
+    }
 
-        private void OnRemoveFile(object sender, RoutedEventArgs e)
-        {
-            ViewModel.SelectedWorkspace.RemoveSelectedFile();
-        }
+    private void OnOpenClicked(object sender, RoutedEventArgs e)
+    {
+        ViewModel.OpenFileInteractive();
+    }
+
+    private void OnRemoveFile(object sender, RoutedEventArgs e)
+    {
+        ViewModel.SelectedWorkspace.RemoveSelectedFile();
     }
 }

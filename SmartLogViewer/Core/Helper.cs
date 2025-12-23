@@ -17,11 +17,9 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media;
 using Newtonsoft.Json;
 
@@ -31,12 +29,6 @@ internal static class Helper
 {
     public static bool IsValidIndex(this int index, IList collection)
         => index >= 0 && index < collection.Count;
-
-    public static RoutedUICommand CreateCommand(string name, string description, Key key, ModifierKeys modifier, string str)
-        => CreateCommand(name, description, new KeyGesture(key, modifier, str));
-
-    public static RoutedUICommand CreateCommand(string name, string description, KeyGesture keyGesture)
-        => new(description, name, typeof(FrameworkElement), new InputGestureCollection(new List<InputGesture>() { keyGesture }));
 
     public static string GetFullPath(string fileName)
     {

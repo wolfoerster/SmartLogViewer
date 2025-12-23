@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:SmartLogViewer.Core"
              xmlns:viewmos="clr-namespace:SmartLogViewer.ViewModels"
              mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance Type=viewmos:MainViewModel}"
@@ -12,6 +13,9 @@
       <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
   </UserControl.Resources>
+  <UserControl.CommandBindings>
+    <CommandBinding Command="core:Commands.CreateWorkspaceCmd" Executed="ExecuteCreateWorkspaceCmd" CanExecute="CanExecuteCreateWorkspaceCmd" />
+  </UserControl.CommandBindings>
   <Grid Margin="4">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="Auto"/>
@@ -31,7 +35,8 @@
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-          <Button Content="Create" Click="OnCreateClicked"/>
+          <!--<Button Content="Create" Click="OnCreateClicked"/>-->
+          <Button Content="Create" Command="core:Commands.CreateWorkspaceCmd"/>
           <Button Content="Remove" Click="OnRemoveClicked" Margin="4,0,0,0" IsEnabled="{Binding CanRemoveWorkspace}"/>
         </StackPanel>
         <ListView Grid.Row="1" Margin="0,4,0,0"

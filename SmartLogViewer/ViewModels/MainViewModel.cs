@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
+using System.Windows.Input;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using SmartLogging;
