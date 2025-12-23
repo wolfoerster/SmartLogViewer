@@ -16,6 +16,8 @@
   <UserControl.CommandBindings>
     <CommandBinding Command="core:Commands.CreateWorkspace" Executed="DoCreateWorkspace"/>
     <CommandBinding Command="core:Commands.RemoveWorkspace" Executed="DoRemoveWorkspace" CanExecute="CanRemoveWorkspace"/>
+    <CommandBinding Command="core:Commands.OpenFile" Executed="DoOpenFile"/>
+    <CommandBinding Command="core:Commands.CloseFile" Executed="DoCloseFile" CanExecute="CanCloseFile"/>
   </UserControl.CommandBindings>
   <Grid Margin="4">
     <Grid.ColumnDefinitions>
@@ -57,8 +59,8 @@
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-          <Button Content="Open"/>
-          <Button Content="Close" Margin="4,0,0,0"/>
+          <Button Command="{Binding OpenFile}" Content="{Binding OpenFile.Name}" ToolTip="{Binding OpenFile.Text}"/>
+          <Button Command="{Binding CloseFile}" Content="{Binding CloseFile.Name}" ToolTip="{Binding CloseFile.Text}" Margin="4,0,0,0"/>
         </StackPanel>
         <ListView Grid.Row="1" Margin="0,4,0,0"
           ItemsSource="{Binding SelectedWorkspace.Files}" 

@@ -17,6 +17,9 @@
 
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
+using Microsoft.Win32;
+using SmartLogging;
 using SmartLogViewer.Models;
 using SmartLogViewer.ViewModels.Basics;
 using static System.IO.Path;
@@ -25,6 +28,7 @@ namespace SmartLogViewer.ViewModels;
 
 internal class WorkspaceViewModel : PropertyChangedNotifier
 {
+    private static readonly SmartLogger Log = new();
     private readonly WorkspaceModel model;
 
     public WorkspaceViewModel(WorkspaceModel model)
@@ -51,23 +55,49 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
         set => Checkset(ref model.SelectedFileIndex, value);
     }
 
-    public string GetDirectory()
+    public void DoOpenFile()
     {
+        var initialDir = GetTempPath();
+
         if (Files.Count > 0)
         {
             var directory = GetDirectoryName(Files[^1]);
             if (directory != null)
-                return directory;
+                initialDir = directory;
         }
 
-        return GetTempPath();
+        var dlg = new OpenFileDialog
+        {
+            Title = "Select a log file",
+            Filter = "Log Files|*.log|All Files|*.*",
+            InitialDirectory = initialDir,
+        };
+
+        if (dlg.ShowDialog() == true)
+            OpenFile(dlg.FileName);
     }
 
-    public bool Contains(string fileName) => Files.Contains(fileName);
-
-    public void Add(string fileName)
+    public void DoCloseFile()
     {
+        Files.RemoveAt(SelectedFileIndex);
+    }
+
+    private void OpenFile(string fileName)
+    {
+        if (!File.Exists(fileName))
+        {
+            Log.Information($"File '{fileName}' does not exist");
+            return;
+        }
+
+        if (Files.Contains(fileName))
+        {
+            Log.Information($"File '{fileName}' already open");
+            return;
+        }
+
         Files.Add(fileName);
+        Log.Information($"File '{fileName}' opened");
     }
 
     private void FilesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -87,9 +117,5 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
             model.Files.Remove(oldFileName);
             return;
         }
-    }
-
-    public void RemoveSelectedFile()
-    {
     }
 }

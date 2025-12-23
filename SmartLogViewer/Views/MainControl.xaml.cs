@@ -15,7 +15,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using SmartLogging;
@@ -33,6 +32,7 @@ public partial class MainControl : UserControl
     public MainControl()
     {
         Log.Information();
+
         ViewModel = new MainViewModel(Restore<MainModel>());
         ViewModel.Initialize();
 
@@ -48,7 +48,7 @@ public partial class MainControl : UserControl
 
     public void CanRemoveWorkspace(object sender, CanExecuteRoutedEventArgs e)
     {
-        var isValidIndex = ViewModel.SelectedWorkspaceIndex.IsValidIndex(ViewModel.Workspaces);
+        var isValidIndex = ViewModel.SelectedWorkspaceIndex >= 0;
         e.CanExecute = isValidIndex && ViewModel.Workspaces.Count > 1;
     }
 
@@ -57,13 +57,18 @@ public partial class MainControl : UserControl
         ViewModel.DoRemoveWorkspace();
     }
 
-    private void OnOpenClicked(object sender, RoutedEventArgs e)
+    private void DoOpenFile(object sender, ExecutedRoutedEventArgs e)
     {
-        ViewModel.OpenFileInteractive();
+        ViewModel.SelectedWorkspace.DoOpenFile();
     }
 
-    private void OnRemoveFile(object sender, RoutedEventArgs e)
+    public void CanCloseFile(object sender, CanExecuteRoutedEventArgs e)
     {
-        ViewModel.SelectedWorkspace.RemoveSelectedFile();
+        e.CanExecute = ViewModel.SelectedWorkspace.SelectedFileIndex >= 0;
+    }
+
+    private void DoCloseFile(object sender, ExecutedRoutedEventArgs e)
+    {
+        ViewModel.SelectedWorkspace.DoCloseFile();
     }
 }

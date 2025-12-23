@@ -19,9 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.IO;
 using System.Windows.Input;
-using Microsoft.Win32;
 using SmartLogging;
 using SmartLogViewer.Core;
 using SmartLogViewer.Models;
@@ -79,6 +77,10 @@ internal class MainViewModel : PropertyChangedNotifier
 
     public static RoutedUICommand RemoveWorkspace => Commands.RemoveWorkspace;
 
+    public static RoutedUICommand OpenFile => Commands.OpenFile;
+
+    public static RoutedUICommand CloseFile => Commands.CloseFile;
+
     public static List<string> ReadModes { get; set; } = [];
 
     public static List<string> LogLevels { get; set; } = [];
@@ -122,37 +124,6 @@ internal class MainViewModel : PropertyChangedNotifier
         var newIndex = Math.Max(0, SelectedWorkspaceIndex - 1);
         Workspaces.RemoveAt(SelectedWorkspaceIndex);
         SelectedWorkspaceIndex = newIndex;
-    }
-
-    public void OpenFileInteractive()
-    {
-        var dlg = new OpenFileDialog
-        {
-            Title = "Select a log file",
-            Filter = "Log Files|*.log|All Files|*.*",
-            InitialDirectory = SelectedWorkspace.GetDirectory(),
-        };
-
-        if (dlg.ShowDialog() == true)
-            OpenFile(dlg.FileName);
-    }
-
-    private void OpenFile(string fileName)
-    {
-        if (!File.Exists(fileName))
-        {
-            Log.Information($"File '{fileName}' does not exist");
-            return;
-        }
-
-        if (SelectedWorkspace.Contains(fileName))
-        {
-            Log.Information($"File '{fileName}' already open");
-            return;
-        }
-
-        SelectedWorkspace.Add(fileName);
-        Log.Information($"File '{fileName}' opened");
     }
 
     private void InitWorkspaces()
