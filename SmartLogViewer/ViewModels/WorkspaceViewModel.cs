@@ -109,7 +109,7 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
         Files.Add(fileName);
         Log.Information($"File '{fileName}' opened");
         SelectedFileIndex = Files.Count - 1;
-        LogViewMan.Add(fileName);
+        LogViewManager.Add(fileName);
     }
 
     private void FilesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

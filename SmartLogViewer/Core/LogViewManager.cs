@@ -19,7 +19,7 @@ using System;
 
 namespace SmartLogViewer.Core;
 
-internal static class LogViewMan
+internal static class LogViewManager
 {
     internal static void Add(string fileName)
     {
