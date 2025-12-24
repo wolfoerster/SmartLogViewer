@@ -15,6 +15,32 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
+/**************************************************************
+ * 
+ *
+ * A log file might look like this:
+ *
+ * Line1: random text (or perhaps a hint to the file format)
+ * Line2: random text or whatever
+ * Line3: LogLevel TimeStamp LogContext LogMessage ...
+ * Line4: ... LogMessage (continued)
+ * Line5: LogLevel TimeStamp LogContext LogMessage
+ * Line6: LogLevel TimeStamp LogContext LogMessage ...
+ * Line7: ... LogMessage (continued)
+ * Line8: LogLevel TimeStamp LogContext LogMessage
+ * 
+ * So to parse that file do this:
+ * 
+ * while (true)
+ * {
+ *    if (!FindNextTimeStamp)
+ *        break;
+ * 
+ *    ReadRecord(); // which in the above example has parts BEFORE and AFTER the TimeStamp!
+ * }
+ * 
+ ***************************************************************/
+
 using System;
 
 namespace SmartLogViewer.ByteParser;
