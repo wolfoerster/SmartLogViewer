@@ -23,9 +23,9 @@ using System.Windows;
 using System.Windows.Media;
 using Newtonsoft.Json;
 
-namespace SmartLogViewer.Core;
+namespace SmartLogViewer.Helper;
 
-internal static class Helper
+internal static class Utils
 {
     public static bool IsValidIndex(this int index, IList collection)
         => index >= 0 && index < collection.Count;

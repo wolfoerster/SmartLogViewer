@@ -22,7 +22,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using SmartLogging;
-using SmartLogViewer.Core;
+using SmartLogViewer.Helper;
 using SmartLogViewer.Models;
 
 namespace SmartLogViewer;
@@ -38,7 +38,7 @@ public partial class App : Application
 
         var assemblyName = Assembly.GetExecutingAssembly().GetName();
         Version = assemblyName?.Version ?? new Version(0, 0, 0);
-        Settings = Helper.Restore<AppSettings>();
+        Settings = Utils.Restore<AppSettings>();
 
         LogWriter.Init(new LogSettings 
         { 

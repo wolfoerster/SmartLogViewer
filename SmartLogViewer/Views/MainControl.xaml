@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:core="clr-namespace:SmartLogViewer.Core"
+             xmlns:helper="clr-namespace:SmartLogViewer.Helper"
              xmlns:viewmos="clr-namespace:SmartLogViewer.ViewModels"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=viewmos:MainViewModel}"
@@ -14,10 +14,10 @@
     </Style>
   </UserControl.Resources>
   <UserControl.CommandBindings>
-    <CommandBinding Command="core:Commands.CreateWorkspace" Executed="DoCreateWorkspace"/>
-    <CommandBinding Command="core:Commands.RemoveWorkspace" Executed="DoRemoveWorkspace" CanExecute="CanRemoveWorkspace"/>
-    <CommandBinding Command="core:Commands.OpenFile" Executed="DoOpenFile"/>
-    <CommandBinding Command="core:Commands.CloseFile" Executed="DoCloseFile" CanExecute="CanCloseFile"/>
+    <CommandBinding Command="helper:Commands.CreateWorkspace" Executed="DoCreateWorkspace"/>
+    <CommandBinding Command="helper:Commands.RemoveWorkspace" Executed="DoRemoveWorkspace" CanExecute="CanRemoveWorkspace"/>
+    <CommandBinding Command="helper:Commands.OpenFile" Executed="DoOpenFile"/>
+    <CommandBinding Command="helper:Commands.CloseFile" Executed="DoCloseFile" CanExecute="CanCloseFile"/>
   </UserControl.CommandBindings>
   <Grid Margin="4">
     <Grid.ColumnDefinitions>

@@ -20,6 +20,7 @@ using System.Collections.Specialized;
 using System.IO;
 using Microsoft.Win32;
 using SmartLogging;
+using SmartLogViewer.Core;
 using SmartLogViewer.Models;
 using SmartLogViewer.ViewModels.Basics;
 using static System.IO.Path;
@@ -107,6 +108,8 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
 
         Files.Add(fileName);
         Log.Information($"File '{fileName}' opened");
+        SelectedFileIndex = Files.Count - 1;
+        LogViewMan.Add(fileName);
     }
 
     private void FilesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

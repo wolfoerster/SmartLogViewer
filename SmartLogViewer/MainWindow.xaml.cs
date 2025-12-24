@@ -19,7 +19,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using SmartLogging;
-using SmartLogViewer.Core;
+using SmartLogViewer.Helper;
 using SmartLogViewer.ViewModels;
 using SmartLogViewer.Views;
 

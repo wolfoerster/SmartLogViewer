@@ -15,7 +15,7 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-namespace SmartLogViewer.Core;
+namespace SmartLogViewer.Helper;
 
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ public class Screen
     // size of a device name string
     private const int CCHDEVICENAME = 32;
 
-    private delegate bool MonitorEnumDelegate(IntPtr hMonitor, IntPtr hdcMonitor, ref Rect lprcMonitor, IntPtr dwData);
+    private delegate bool MonitorEnumDelegate(nint hMonitor, nint hdcMonitor, ref Rect lprcMonitor, nint dwData);
 
     /// <summary>
     /// Gets or sets the name of the screen.
@@ -128,12 +128,12 @@ public class Screen
         var screens = new List<Screen>();
 
         EnumDisplayMonitors(
-            IntPtr.Zero,
-            IntPtr.Zero,
-            delegate (IntPtr hMonitor, IntPtr hdcMonitor, ref Rect lprcMonitor, IntPtr dwData)
+            nint.Zero,
+            nint.Zero,
+            delegate (nint hMonitor, nint hdcMonitor, ref Rect lprcMonitor, nint dwData)
             {
-                MonitorInfoEx mi = default(MonitorInfoEx);
-                mi.Size = (int)Marshal.SizeOf(mi);
+                MonitorInfoEx mi = default;
+                mi.Size = Marshal.SizeOf(mi);
                 bool success = GetMonitorInfo(hMonitor, ref mi);
                 if (success)
                 {
@@ -149,16 +149,16 @@ public class Screen
 
                 return true;
             },
-            IntPtr.Zero);
+            nint.Zero);
 
         return screens;
     }
 
     [DllImport("user32.dll")]
-    private static extern bool EnumDisplayMonitors(IntPtr hdc, IntPtr lprcClip, MonitorEnumDelegate lpfnEnum, IntPtr dwData);
+    private static extern bool EnumDisplayMonitors(nint hdc, nint lprcClip, MonitorEnumDelegate lpfnEnum, nint dwData);
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
-    private static extern bool GetMonitorInfo(IntPtr hMonitor, ref MonitorInfoEx lpmi);
+    private static extern bool GetMonitorInfo(nint hMonitor, ref MonitorInfoEx lpmi);
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
     private struct MonitorInfoEx
@@ -176,8 +176,8 @@ public class Screen
 
         public void Init()
         {
-            this.Size = 40 + (2 * CCHDEVICENAME);
-            this.DeviceName = string.Empty;
+            Size = 40 + 2 * CCHDEVICENAME;
+            DeviceName = string.Empty;
         }
     }
 

@@ -21,10 +21,10 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows.Input;
 using SmartLogging;
-using SmartLogViewer.Core;
+using SmartLogViewer.Helper;
 using SmartLogViewer.Models;
 using SmartLogViewer.ViewModels.Basics;
-using static SmartLogViewer.Core.Helper;
+using static SmartLogViewer.Helper.Utils;
 
 namespace SmartLogViewer.ViewModels;
 

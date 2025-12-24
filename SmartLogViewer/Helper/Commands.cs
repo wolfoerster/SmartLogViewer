@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 
-namespace SmartLogViewer.Core;
+namespace SmartLogViewer.Helper;
 
 internal static class Commands
 {
