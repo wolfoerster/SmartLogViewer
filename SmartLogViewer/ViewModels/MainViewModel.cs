@@ -126,6 +126,7 @@ internal class MainViewModel : PropertyChangedNotifier
     public void DoCreateWorkspace()
     {
         Workspaces.Add(new WorkspaceModel { Name = $"Workspace {Workspaces.Count + 1}" });
+        SelectedWorkspaceIndex = Workspaces.Count - 1;
     }
 
     public void DoRemoveWorkspace()

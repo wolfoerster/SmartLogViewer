@@ -6,8 +6,8 @@
              xmlns:core="clr-namespace:SmartLogViewer.Core"
              xmlns:viewmos="clr-namespace:SmartLogViewer.ViewModels"
              mc:Ignorable="d" 
-        d:DataContext="{d:DesignInstance Type=viewmos:MainViewModel}"
-        TextElement.FontSize="12">
+             d:DataContext="{d:DesignInstance Type=viewmos:MainViewModel}"
+             TextElement.FontSize="12">
   <UserControl.Resources>
     <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
       <Setter Property="VerticalAlignment" Value="Center"/>
@@ -21,8 +21,8 @@
   </UserControl.CommandBindings>
   <Grid Margin="4">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="Auto"/>
-      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="200"/>
+      <ColumnDefinition Width="400"/>
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
     <!--<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="33" Margin="4">
@@ -31,7 +31,7 @@
       <ComboBox Width="120" Margin="12,0,0,0" ItemsSource="{Binding LogLevels}" SelectedIndex="{Binding SelectedLogLevel}" ToolTip="Select amount to read based on log level"/>
       <ComboBox Width="120" Margin="12,0,0,0" ItemsSource="{Binding ThemeModes}" SelectedIndex="{Binding SelectedThemeMode}" ToolTip="Select overall appearance"/>
     </StackPanel>-->
-    <GroupBox Grid.Column="0" Header="Workspaces" Padding="4" MinWidth="200" MinHeight="300" Margin="4">
+    <GroupBox Grid.Column="0" Header="Workspaces" Padding="4" Margin="4">
       <Grid Margin="0,4,0,0">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -52,7 +52,7 @@
         </ListView>
       </Grid>
     </GroupBox>
-    <GroupBox Grid.Column="1" Header="Files" Padding="4" MinWidth="200" MinHeight="300" Margin="4">
+    <GroupBox Grid.Column="1" Header="Files" Padding="4" Margin="4">
       <Grid Margin="0,4,0,0">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
@@ -73,7 +73,7 @@
         </ListView>
       </Grid>
     </GroupBox>
-    <GroupBox Grid.Column="2" Header="Settings" Padding="8,0" MinWidth="200" MinHeight="300" Margin="4">
+    <GroupBox Grid.Column="2" Header="Settings" Padding="8,0" MinWidth="200" Margin="4">
       <Grid>
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
