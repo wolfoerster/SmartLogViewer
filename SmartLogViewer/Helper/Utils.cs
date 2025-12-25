@@ -27,9 +27,6 @@ namespace SmartLogViewer.Helper;
 
 internal static class Utils
 {
-    public static bool IsValidIndex(this int index, IList collection)
-        => index >= 0 && index < collection.Count;
-
     public static string GetFullPath(string fileName)
     {
         var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "SmartLogViewer");

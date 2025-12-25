@@ -29,48 +29,6 @@ namespace SmartLogViewer.Common;
 
 public static class Utils
 {
-    /// <summary>
-    /// Returns an error string or null if no error ocurred.
-    /// </summary>
-    public static string? DeleteFile(string path)
-    {
-        if (!File.Exists(path))
-            return null;
-
-        try
-        {
-            File.Delete(path);
-            return null;
-        }
-        catch (Exception e)
-        {
-            return e.ToString();
-        }
-    }
-
-    /// <summary>
-    /// Returns an error string or null if no error ocurred.
-    /// </summary>
-    public static string? CopyFile(string source, string dest)
-    {
-        try
-        {
-            File.Copy(source, dest, true);
-            return null;
-        }
-        catch (Exception e)
-        {
-            return e.ToString();
-        }
-    }
-
-    /// <summary>
-    /// Clamps the specified x value to the given range.
-    /// </summary>
-    /// <param name="x">The x value.</param>
-    /// <param name="xMin">The minimum x value.</param>
-    /// <param name="xMax">The maximum x value.</param>
-    /// <returns></returns>
     public static double Clamp(double x, double xMin, double xMax)
     {
         return Math.Min(Math.Max(x, xMin), xMax);
@@ -84,27 +42,6 @@ public static class Utils
     public static bool IsValidIndex(this IList list, int index)
     {
         return index >= 0 && index < list.Count;
-    }
-
-    /// <summary>
-    /// Returns an error string or null if no error ocurred.
-    /// </summary>
-    static public string? GetFileInfo(string name, out FileInfo? fileInfo)
-    {
-        fileInfo = null;
-
-        if (!File.Exists(name))
-            return $"File >{name}< does not exist";
-
-        try
-        {
-            fileInfo = new FileInfo(name);
-            return null;
-        }
-        catch (Exception e)
-        {
-            return e.ToString();
-        }
     }
 
     /// <summary>
@@ -143,10 +80,10 @@ public static class Utils
     public static void OnlyOnce(object field, object value)
     {
         if (field != null)
-            throw new Exception("Field must be null!");
+            throw new ArgumentException("Field must be null!");
 
         if (value == null)
-            throw new Exception("Value must not be null!");
+            throw new ArgumentException("Value must not be null!");
     }
 
     /// <summary>
@@ -326,30 +263,17 @@ public static class Utils
         return true;
     }
 
-    /// <summary>
-    /// Read some bytes from the specified file.
-    /// Returns an error string or null if no error ocurred.
-    /// </summary>
-    public static string? ReadBytes(string path, out byte[] bytes, long startPosition = 0, long count = 0)
+    public static byte[] ReadBytes(string path, long startPosition = 0, long count = 0)
     {
-        try
-        {
-            using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            using var reader = new BinaryReader(fs);
+        using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        using var reader = new BinaryReader(fs);
 
-            if (startPosition > 0)
-                reader.BaseStream.Seek(startPosition, SeekOrigin.Begin);
+        if (startPosition > 0)
+            reader.BaseStream.Seek(startPosition, SeekOrigin.Begin);
 
-            if (count <= 0)
-                count = fs.Length - startPosition;
+        if (count <= 0)
+            count = fs.Length - startPosition;
 
-            bytes = reader.ReadBytes((int)count);
-            return null;
-        }
-        catch (Exception e)
-        {
-            bytes = [];
-            return e.ToString();
-        }
+        return reader.ReadBytes((int)count);
     }
 }
