@@ -30,5 +30,5 @@ public class LogRecord
 
     public string LogMessage { get; set; } = "";
 
-    Dictionary<string, string> Annex { get; } = [];
+    Dictionary<string, string> Properties { get; } = [];
 }

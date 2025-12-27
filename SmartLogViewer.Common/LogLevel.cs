@@ -30,6 +30,4 @@ public enum LogLevel
     Error,
 
     Fatal,
-
-    None,
 }
