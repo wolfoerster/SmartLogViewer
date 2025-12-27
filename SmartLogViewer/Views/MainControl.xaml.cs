@@ -20,6 +20,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using SmartLogging;
+using SmartLogViewer.Common;
 using SmartLogViewer.ViewModels;
 using SmartLogViewer.ViewModels.Basics;
 
@@ -45,21 +46,17 @@ public partial class MainControl : UserControl
     {
         if (e.PropertyName == nameof(MainViewModel.SelectedWorkspaceIndex))
         {
-            if (e.NewValue is int newValue && newValue == -1)
+            var oldIndex = (int)(e.OldValue ?? -1);
+            var newIndex = (int)(e.NewValue ?? -1);
+
+            if (oldIndex < 0 || newIndex < 0)
             {
-                if (e.OldValue is int oldValue && oldValue < ViewModel.Workspaces.Count)
-                {
-                    var timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(10) };
-
-                    timer.Tick += (s, e) =>
-                    {
-                        timer.Stop();
-                        ViewModel.SelectedWorkspaceIndex = oldValue;
-                    };
-
-                    timer.Start();
-                }
+                SelectPreviousWorkspace(oldIndex);
+                return;
             }
+
+            ViewModel.HandleSelectedWorkspaceIndexChangedPreview(newIndex);
+            return;
         }
     }
 
@@ -91,5 +88,21 @@ public partial class MainControl : UserControl
     private void DoCloseFile(object sender, ExecutedRoutedEventArgs e)
     {
         ViewModel.SelectedWorkspace.DoCloseFile();
+    }
+
+    private void SelectPreviousWorkspace(int oldIndex)
+    {
+        if (oldIndex.IsValidIndex(ViewModel.Workspaces))
+        {
+            var timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(30) };
+
+            timer.Tick += (s, e) =>
+            {
+                timer.Stop();
+                ViewModel.SelectedWorkspaceIndex = oldIndex;
+            };
+
+            timer.Start();
+        }
     }
 }

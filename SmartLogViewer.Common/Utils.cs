@@ -39,7 +39,7 @@ public static class Utils
         return Math.Min(Math.Max(x, xMin), xMax);
     }
 
-    public static bool IsValidIndex(this IList list, int index)
+    public static bool IsValidIndex(this int index, IList list)
     {
         return index >= 0 && index < list.Count;
     }
