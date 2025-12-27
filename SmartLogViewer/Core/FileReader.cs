@@ -25,16 +25,15 @@ namespace SmartLogViewer.Core;
 internal class FileReader
 {
     protected readonly SmartLogger Log;
-    protected string fileName;
-    protected bool isNewLogFile;
+    private readonly string fileName;
+    private bool isNewLogFile;
     private long prevLength;
 
     public FileReader(string fileName)
     {
         this.fileName = fileName;
         prevLength = 0;
-        var name = Path.GetFileName(fileName);
-        Log = new SmartLogger($"{GetType().Name}.{name}");
+        Log = new SmartLogger($"{GetType().Name}.{Path.GetFileName(fileName)}");
         Log.Information(new { fileName });
     }
 
@@ -63,7 +62,7 @@ internal class FileReader
         try
         {
             //--- if the file size did not change, we're done
-            FileInfo fileInfo = new FileInfo(path);
+            var fileInfo = new FileInfo(path);
             if (fileInfo.Length == prevLength)
                 return [];
 
@@ -75,7 +74,7 @@ internal class FileReader
             }
 
             //--- now read the next bytes
-            int count = (int)(fileInfo.Length - prevLength);
+            var count = fileInfo.Length - prevLength;
             var bytes = Utils.ReadBytes(path, prevLength, count);
             prevLength = fileInfo.Length;
             return bytes;
@@ -95,7 +94,7 @@ internal class FileReader
     {
         try
         {
-            FileInfo fileInfo = new FileInfo(path);
+            var fileInfo = new FileInfo(path);
             prevLength = fileInfo.Length;
             return Utils.ReadBytes(path, 0, fileInfo.Length);
         }
