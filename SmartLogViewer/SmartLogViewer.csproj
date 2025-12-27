@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SmartLogging" Version="3.0.0" />
+    <PackageReference Include="SmartLogging" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
