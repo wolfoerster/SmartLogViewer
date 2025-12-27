@@ -50,7 +50,7 @@ public partial class MainWindow : Window
     private void MeLoaded(object sender, RoutedEventArgs e)
     {
         Log.Information();
-        if (App.Settings.IsMaximized)
+        if (App.Settings.Location.IsMaximized)
             WindowState = WindowState.Maximized;
     }
 
@@ -67,7 +67,7 @@ public partial class MainWindow : Window
 
     private void RestoreSizeAndPosition()
     {
-        var name = App.Settings.ScreenName;
+        var name = App.Settings.Location.ScreenName;
         var screen = Screen.LookUpByName(name);
         if (screen == null)
         {
@@ -77,27 +77,27 @@ public partial class MainWindow : Window
             return;
         }
 
-        Top = App.Settings.Top;
-        Left = App.Settings.Left;
-        Width = App.Settings.Width;
-        Height = App.Settings.Height;
+        Top = App.Settings.Location.Top;
+        Left = App.Settings.Location.Left;
+        Width = App.Settings.Location.Width;
+        Height = App.Settings.Location.Height;
         WindowState = WindowState.Normal;
         WindowStartupLocation = WindowStartupLocation.Manual;
     }
 
     private void StoreSizeAndPosition()
     {
-        App.Settings.IsMaximized = WindowState == WindowState.Maximized;
+        App.Settings.Location.IsMaximized = WindowState == WindowState.Maximized;
         WindowState = WindowState.Normal;
 
         var pt = new Point(Left, Top).ToPixel(this);
         var screen = Screen.LookUpByPixel(pt);
-        App.Settings.ScreenName = screen?.Name;
+        App.Settings.Location.ScreenName = screen?.Name;
 
-        App.Settings.Top = Top;
-        App.Settings.Left = Left;
-        App.Settings.Width = Width;
-        App.Settings.Height = Height;
+        App.Settings.Location.Top = Top;
+        App.Settings.Location.Left = Left;
+        App.Settings.Location.Width = Width;
+        App.Settings.Location.Height = Height;
         App.Settings.Store();
     }
 }

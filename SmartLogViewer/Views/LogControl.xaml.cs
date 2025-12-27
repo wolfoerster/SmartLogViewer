@@ -15,15 +15,14 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using SmartLogging;
+using System.Windows.Controls;
 
-namespace SmartLogViewer.Models;
+namespace SmartLogViewer.Views;
 
-internal class AppSettings
+public partial class LogControl : UserControl
 {
-    public WindowLocation Location;
-
-    public int ThemeModeIndex;
-
-    public LogLevel LogLevel = LogLevel.Information;
+    public LogControl()
+    {
+        InitializeComponent();
+    }
 }

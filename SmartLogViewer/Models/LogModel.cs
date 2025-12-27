@@ -15,15 +15,8 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using SmartLogging;
-
 namespace SmartLogViewer.Models;
 
-internal class AppSettings
+internal class LogModel
 {
-    public WindowLocation Location;
-
-    public int ThemeModeIndex;
-
-    public LogLevel LogLevel = LogLevel.Information;
 }

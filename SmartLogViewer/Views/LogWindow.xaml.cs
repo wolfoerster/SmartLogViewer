@@ -17,13 +17,12 @@
 
 using System.Windows;
 
-namespace SmartLogViewer.Views
+namespace SmartLogViewer.Views;
+
+public partial class LogWindow : Window
 {
-    public partial class LogView : Window
+    public LogWindow()
     {
-        public LogView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

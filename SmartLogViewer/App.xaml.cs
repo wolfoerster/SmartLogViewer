@@ -85,7 +85,7 @@ public partial class App : Application
         _ => ThemeMode.None,
     };
 
-    public static void UpdateThemeMode()
+    internal static void UpdateThemeMode()
     {
         //var msg = "You have to restart the application!\r\n\r\nRestart now?";
         //var res = MessageBox.Show(msg, "Switching Theme", MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -103,7 +103,7 @@ public partial class App : Application
         }
     }
 
-    public static Version Version { get; }
+    internal static Version Version { get; }
 
-    public static AppSettings Settings { get; }
+    internal static AppSettings Settings { get; }
 }

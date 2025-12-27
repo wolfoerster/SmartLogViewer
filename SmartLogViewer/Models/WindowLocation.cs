@@ -15,15 +15,19 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using SmartLogging;
-
 namespace SmartLogViewer.Models;
 
-internal class AppSettings
+internal struct WindowLocation
 {
-    public WindowLocation Location;
+    public double Left;
 
-    public int ThemeModeIndex;
+    public double Top;
 
-    public LogLevel LogLevel = LogLevel.Information;
+    public double Width;
+
+    public double Height;
+
+    public bool IsMaximized;
+
+    public string? ScreenName;
 }

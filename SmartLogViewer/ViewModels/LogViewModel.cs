@@ -16,14 +16,19 @@
 //******************************************************************************************
 
 using SmartLogging;
+using SmartLogViewer.Models;
+using SmartLogViewer.ViewModels.Basics;
 
-namespace SmartLogViewer.Models;
+namespace SmartLogViewer.ViewModels;
 
-internal class AppSettings
+internal class LogViewModel : PropertyChangedNotifier
 {
-    public WindowLocation Location;
+    private static readonly SmartLogger Log = new();
+    private readonly LogModel model;
 
-    public int ThemeModeIndex;
-
-    public LogLevel LogLevel = LogLevel.Information;
+    public LogViewModel(LogModel model)
+    {
+        Log.Information();
+        this.model = model;
+    }
 }
