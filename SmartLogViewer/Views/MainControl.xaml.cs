@@ -15,14 +15,10 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
 using SmartLogging;
-using SmartLogViewer.Common;
 using SmartLogViewer.ViewModels;
-using SmartLogViewer.ViewModels.Basics;
 
 namespace SmartLogViewer.Views;
 
@@ -35,29 +31,10 @@ public partial class MainControl : UserControl
     {
         Log.Information();
         ViewModel = new MainViewModel();
-        ViewModel.PropertyChangedPreview += ViewModelPropertyChangedPreview;
 
         InitializeComponent();
 
         DataContext = ViewModel;
-    }
-
-    private void ViewModelPropertyChangedPreview(object? sender, PropertyChangedPreviewEventArgs e)
-    {
-        if (e.PropertyName == nameof(MainViewModel.SelectedWorkspaceIndex))
-        {
-            var oldIndex = (int)(e.OldValue ?? -1);
-            var newIndex = (int)(e.NewValue ?? -1);
-
-            if (oldIndex < 0 || newIndex < 0)
-            {
-                SelectPreviousWorkspace(oldIndex);
-                return;
-            }
-
-            ViewModel.HandleSelectedWorkspaceIndexChangedPreview(newIndex);
-            return;
-        }
     }
 
     public void DoCreateWorkspace(object sender, ExecutedRoutedEventArgs e)
@@ -88,21 +65,5 @@ public partial class MainControl : UserControl
     private void DoCloseFile(object sender, ExecutedRoutedEventArgs e)
     {
         ViewModel.SelectedWorkspace.DoCloseFile();
-    }
-
-    private void SelectPreviousWorkspace(int oldIndex)
-    {
-        if (oldIndex.IsValidIndex(ViewModel.Workspaces))
-        {
-            var timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(30) };
-
-            timer.Tick += (s, e) =>
-            {
-                timer.Stop();
-                ViewModel.SelectedWorkspaceIndex = oldIndex;
-            };
-
-            timer.Start();
-        }
     }
 }

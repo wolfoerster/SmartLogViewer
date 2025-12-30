@@ -20,11 +20,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows.Input;
+using System.Windows.Threading;
 using SmartLogging;
 using SmartLogViewer.Helper;
 using SmartLogViewer.Models;
 using SmartLogViewer.ViewModels.Basics;
 using static SmartLogViewer.Helper.Utils;
+using static SmartLogViewer.Common.Utils;
 
 namespace SmartLogViewer.ViewModels;
 
@@ -39,14 +41,12 @@ internal class MainViewModel : PropertyChangedNotifier
         model = Restore<MainModel>();
 
         if (model.Workspaces.Count == 0)
-        {
             model.Workspaces.Add(new WorkspaceModel { Name = "Workspace 1" });
-            model.SelectedWorkspaceIndex = 0;
-        }
 
         for (int i = 0; i < model.Workspaces.Count; i++)
             Workspaces.Add(model.Workspaces[i]);
 
+        model.SelectedWorkspaceIndex = Clamp(model.SelectedWorkspaceIndex, 0, Workspaces.Count - 1);
         SelectedWorkspace = Workspaces[SelectedWorkspaceIndex];
         Workspaces.CollectionChanged += WorkspacesCollectionChanged;
     }
@@ -118,7 +118,7 @@ internal class MainViewModel : PropertyChangedNotifier
     public int SelectedWorkspaceIndex
     {
         get => model.SelectedWorkspaceIndex;
-        set => Checkset(ref model.SelectedWorkspaceIndex, value, () => HandleSelectedWorkspaceIndexChanged());
+        set => ChecksetSelectedWorkspaceIndex(value);
     }
 
     public WorkspaceViewModel SelectedWorkspace { get; set; }
@@ -134,22 +134,6 @@ internal class MainViewModel : PropertyChangedNotifier
         var newIndex = Math.Max(0, SelectedWorkspaceIndex - 1);
         Workspaces.RemoveAt(SelectedWorkspaceIndex);
         SelectedWorkspaceIndex = newIndex;
-    }
-
-    public void HandleSelectedWorkspaceIndexChangedPreview(int newIndex)
-    {
-        // close readers and windows of SelectedWorkspace
-
-        // create readers and windows of new workspace
-    }
-
-    private void HandleSelectedWorkspaceIndexChanged()
-    {
-        if (SelectedWorkspaceIndex < 0)
-            return;
-
-        SelectedWorkspace = Workspaces[SelectedWorkspaceIndex];
-        RaisePropertyChanged(nameof(SelectedWorkspace));
     }
 
     private void WorkspacesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -169,5 +153,37 @@ internal class MainViewModel : PropertyChangedNotifier
             model.Workspaces.Remove(oldWorkspace.Model);
             return;
         }
+    }
+
+    private void ChecksetSelectedWorkspaceIndex(int newIndex)
+    {
+        var oldIndex = model.SelectedWorkspaceIndex;
+        if (oldIndex != newIndex)
+        {
+            if (newIndex < 0 && oldIndex >= 0)
+                StartTimer(oldIndex);
+
+            model.SelectedWorkspaceIndex = newIndex;
+            RaisePropertyChanged(nameof(SelectedWorkspaceIndex));
+
+            if (newIndex >= 0)
+            {
+                SelectedWorkspace = Workspaces[newIndex];
+                RaisePropertyChanged(nameof(SelectedWorkspace));
+            }
+        }
+    }
+
+    private void StartTimer(int oldIndex)
+    {
+        var timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(30) };
+
+        timer.Tick += (s, e) =>
+        {
+            timer.Stop();
+            SelectedWorkspaceIndex = oldIndex;
+        };
+
+        timer.Start();
     }
 }
