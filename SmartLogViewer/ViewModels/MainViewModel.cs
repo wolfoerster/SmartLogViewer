@@ -34,8 +34,10 @@ internal class MainViewModel : PropertyChangedNotifier
 {
     private static readonly SmartLogger Log = new();
     private readonly MainModel model;
+    private readonly DispatcherTimer timer = new() { Interval = TimeSpan.FromMilliseconds(30) };
+    private int previousWorkspaceIndex;
 
-    public MainViewModel()
+public MainViewModel()
     {
         Log.Information();
         model = Restore<MainModel>();
@@ -47,8 +49,10 @@ internal class MainViewModel : PropertyChangedNotifier
             Workspaces.Add(model.Workspaces[i]);
 
         model.SelectedWorkspaceIndex = Clamp(model.SelectedWorkspaceIndex, 0, Workspaces.Count - 1);
-        SelectedWorkspace = Workspaces[SelectedWorkspaceIndex];
+        SelectedWorkspace = Workspaces[model.SelectedWorkspaceIndex];
         Workspaces.CollectionChanged += WorkspacesCollectionChanged;
+
+        timer.Tick += (_, _) => { timer.Stop(); SelectedWorkspaceIndex = previousWorkspaceIndex; };
     }
 
     public void Shutdown()
@@ -118,7 +122,7 @@ internal class MainViewModel : PropertyChangedNotifier
     public int SelectedWorkspaceIndex
     {
         get => model.SelectedWorkspaceIndex;
-        set => ChecksetSelectedWorkspaceIndex(value);
+        set => ChangeSelectedWorkspaceIndex(value);
     }
 
     public WorkspaceViewModel SelectedWorkspace { get; set; }
@@ -155,35 +159,23 @@ internal class MainViewModel : PropertyChangedNotifier
         }
     }
 
-    private void ChecksetSelectedWorkspaceIndex(int newIndex)
+    private void ChangeSelectedWorkspaceIndex(int newIndex)
     {
-        var oldIndex = model.SelectedWorkspaceIndex;
-        if (oldIndex != newIndex)
+        previousWorkspaceIndex = model.SelectedWorkspaceIndex;
+        if (newIndex == previousWorkspaceIndex)
+            return;
+
+        if (newIndex < 0 /* nothing IS selected */ 
+            && previousWorkspaceIndex >= 0 /* something WAS selected */)
+            timer.Start();
+
+        model.SelectedWorkspaceIndex = newIndex;
+        RaisePropertyChanged(nameof(SelectedWorkspaceIndex));
+
+        if (newIndex >= 0)
         {
-            if (newIndex < 0 && oldIndex >= 0)
-                StartTimer(oldIndex);
-
-            model.SelectedWorkspaceIndex = newIndex;
-            RaisePropertyChanged(nameof(SelectedWorkspaceIndex));
-
-            if (newIndex >= 0)
-            {
-                SelectedWorkspace = Workspaces[newIndex];
-                RaisePropertyChanged(nameof(SelectedWorkspace));
-            }
+            SelectedWorkspace = Workspaces[newIndex];
+            RaisePropertyChanged(nameof(SelectedWorkspace));
         }
-    }
-
-    private void StartTimer(int oldIndex)
-    {
-        var timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(30) };
-
-        timer.Tick += (s, e) =>
-        {
-            timer.Stop();
-            SelectedWorkspaceIndex = oldIndex;
-        };
-
-        timer.Start();
     }
 }
