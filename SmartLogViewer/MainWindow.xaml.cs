@@ -72,7 +72,7 @@ public partial class MainWindow : Window
         if (screen == null)
         {
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            Width = 800;
+            Width = 900;
             Height = 500;
             return;
         }
