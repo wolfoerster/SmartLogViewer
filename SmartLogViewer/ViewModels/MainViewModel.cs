@@ -25,8 +25,8 @@ using SmartLogging;
 using SmartLogViewer.Helper;
 using SmartLogViewer.Models;
 using SmartLogViewer.ViewModels.Basics;
-using static SmartLogViewer.Helper.Utils;
 using static SmartLogViewer.Common.Utils;
+using static SmartLogViewer.Helper.Utils;
 
 namespace SmartLogViewer.ViewModels;
 
@@ -37,9 +37,10 @@ internal class MainViewModel : PropertyChangedNotifier
     private readonly DispatcherTimer timer = new() { Interval = TimeSpan.FromMilliseconds(30) };
     private int previousWorkspaceIndex;
 
-public MainViewModel()
+    public MainViewModel()
     {
         Log.Information();
+        timer.Tick += TimerTick;
         model = Restore<MainModel>();
 
         if (model.Workspaces.Count == 0)
@@ -48,11 +49,10 @@ public MainViewModel()
         for (int i = 0; i < model.Workspaces.Count; i++)
             Workspaces.Add(model.Workspaces[i]);
 
-        model.SelectedWorkspaceIndex = Clamp(model.SelectedWorkspaceIndex, 0, Workspaces.Count - 1);
-        SelectedWorkspace = Workspaces[model.SelectedWorkspaceIndex];
         Workspaces.CollectionChanged += WorkspacesCollectionChanged;
 
-        timer.Tick += (_, _) => { timer.Stop(); SelectedWorkspaceIndex = previousWorkspaceIndex; };
+        model.SelectedWorkspaceIndex = Clamp(model.SelectedWorkspaceIndex, 0, Workspaces.Count - 1);
+        SelectedWorkspace = Workspaces[model.SelectedWorkspaceIndex];
     }
 
     public void Shutdown()
@@ -72,7 +72,7 @@ public MainViewModel()
             "Last hour",
         ];
 
-        LogLevels = 
+        LogLevels =
         [
             "Verbose",
             "Debug",
@@ -165,10 +165,6 @@ public MainViewModel()
         if (newIndex == previousWorkspaceIndex)
             return;
 
-        if (newIndex < 0 /* nothing IS selected */ 
-            && previousWorkspaceIndex >= 0 /* something WAS selected */)
-            timer.Start();
-
         model.SelectedWorkspaceIndex = newIndex;
         RaisePropertyChanged(nameof(SelectedWorkspaceIndex));
 
@@ -177,5 +173,17 @@ public MainViewModel()
             SelectedWorkspace = Workspaces[newIndex];
             RaisePropertyChanged(nameof(SelectedWorkspace));
         }
+
+        if (newIndex < 0 /* nothing IS selected */
+            && previousWorkspaceIndex >= 0 /* something WAS selected */)
+        {
+            timer.Start(); // re-select previous selected workspace
+        }
+    }
+
+    private void TimerTick(object? sender, EventArgs e)
+    {
+        timer.Stop();
+        SelectedWorkspaceIndex = previousWorkspaceIndex;
     }
 }
