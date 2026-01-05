@@ -17,7 +17,7 @@
 
 namespace SmartLogViewer.Models;
 
-internal class ReaderModel
+internal class ReaderSettings
 {
     public string FileName = "";
 }

@@ -33,7 +33,7 @@ namespace SmartLogViewer.ViewModels;
 internal class MainViewModel : PropertyChangedNotifier
 {
     private static readonly SmartLogger Log = new();
-    private readonly MainModel model;
+    private readonly MainSettings model;
     private readonly DispatcherTimer timer = new() { Interval = TimeSpan.FromMilliseconds(30) };
     private int previousWorkspaceIndex;
 
@@ -41,10 +41,10 @@ internal class MainViewModel : PropertyChangedNotifier
     {
         Log.Information();
         timer.Tick += TimerTick;
-        model = Restore<MainModel>();
+        model = Restore<MainSettings>();
 
         if (model.Workspaces.Count == 0)
-            model.Workspaces.Add(new WorkspaceModel { Name = "Workspace 1" });
+            model.Workspaces.Add(new WorkspaceSettings { Name = "Workspace 1" });
 
         for (int i = 0; i < model.Workspaces.Count; i++)
             Workspaces.Add(model.Workspaces[i]);
@@ -129,7 +129,7 @@ internal class MainViewModel : PropertyChangedNotifier
 
     public void DoCreateWorkspace()
     {
-        Workspaces.Add(new WorkspaceModel { Name = $"Workspace {Workspaces.Count + 1}" });
+        Workspaces.Add(new WorkspaceSettings { Name = $"Workspace {Workspaces.Count + 1}" });
         SelectedWorkspaceIndex = Workspaces.Count - 1;
     }
 

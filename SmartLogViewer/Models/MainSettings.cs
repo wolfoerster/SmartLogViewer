@@ -19,16 +19,13 @@ using System.Collections.Generic;
 
 namespace SmartLogViewer.Models;
 
-internal class WorkspaceModel
+internal class MainSettings
 {
-    public string Name = "";
+    public int ReadModeIndex;
 
-    public List<string> Files = [];
+    public int LogLevelIndex;
 
-    public int SelectedFileIndex = -1;
+    public List<WorkspaceSettings> Workspaces = [];
 
-    public override string ToString()
-    {
-        return $"{Name}, {Files.Count}, {SelectedFileIndex}";
-    }
+    public int SelectedWorkspaceIndex;
 }

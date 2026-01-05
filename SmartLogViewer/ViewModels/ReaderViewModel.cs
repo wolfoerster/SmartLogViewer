@@ -22,12 +22,12 @@ namespace SmartLogViewer.ViewModels;
 
 internal class ReaderViewModel : PropertyChangedNotifier
 {
-    private readonly ReaderModel model;
+    private readonly ReaderSettings model;
 
-    public ReaderViewModel(ReaderModel model)
+    public ReaderViewModel(ReaderSettings model)
     {
         this.model = model;
     }
 
-    public static implicit operator ReaderViewModel(ReaderModel model) => new(model);
+    public static implicit operator ReaderViewModel(ReaderSettings model) => new(model);
 }

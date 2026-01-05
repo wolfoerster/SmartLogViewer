@@ -30,9 +30,9 @@ namespace SmartLogViewer.ViewModels;
 internal class WorkspaceViewModel : PropertyChangedNotifier
 {
     private static readonly SmartLogger Log = new();
-    private readonly WorkspaceModel model;
+    private readonly WorkspaceSettings model;
 
-    public WorkspaceViewModel(WorkspaceModel model)
+    public WorkspaceViewModel(WorkspaceSettings model)
     {
         this.model = model;
 
@@ -42,14 +42,14 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
         Files.CollectionChanged += FilesCollectionChanged;
     }
 
-    public static implicit operator WorkspaceViewModel(WorkspaceModel model) => new(model);
+    public static implicit operator WorkspaceViewModel(WorkspaceSettings model) => new(model);
 
     public override string ToString()
     {
         return $"{model}";
     }
 
-    public WorkspaceModel Model => model;
+    public WorkspaceSettings Model => model;
 
     public string Name
     {
