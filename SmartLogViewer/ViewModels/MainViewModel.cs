@@ -33,7 +33,7 @@ namespace SmartLogViewer.ViewModels;
 internal class MainViewModel : PropertyChangedNotifier
 {
     private static readonly SmartLogger Log = new();
-    private readonly MainSettings model;
+    private readonly MainSettings settings;
     private readonly DispatcherTimer timer = new() { Interval = TimeSpan.FromMilliseconds(30) };
     private int previousWorkspaceIndex;
 
@@ -41,24 +41,24 @@ internal class MainViewModel : PropertyChangedNotifier
     {
         Log.Information();
         timer.Tick += TimerTick;
-        model = Restore<MainSettings>();
+        settings = Restore<MainSettings>();
 
-        if (model.Workspaces.Count == 0)
-            model.Workspaces.Add(new WorkspaceSettings { Name = "Workspace 1" });
+        if (settings.Workspaces.Count == 0)
+            settings.Workspaces.Add(new WorkspaceSettings { Name = "Workspace 1" });
 
-        for (int i = 0; i < model.Workspaces.Count; i++)
-            Workspaces.Add(model.Workspaces[i]);
+        for (int i = 0; i < settings.Workspaces.Count; i++)
+            Workspaces.Add(settings.Workspaces[i]);
 
         Workspaces.CollectionChanged += WorkspacesCollectionChanged;
 
-        model.SelectedWorkspaceIndex = Clamp(model.SelectedWorkspaceIndex, 0, Workspaces.Count - 1);
-        SelectedWorkspace = Workspaces[model.SelectedWorkspaceIndex];
+        settings.SelectedWorkspaceIndex = Clamp(settings.SelectedWorkspaceIndex, 0, Workspaces.Count - 1);
+        SelectedWorkspace = Workspaces[settings.SelectedWorkspaceIndex];
     }
 
     public void Shutdown()
     {
         Log.Information();
-        model.Store();
+        settings.Store();
     }
 
     static MainViewModel()
@@ -121,7 +121,7 @@ internal class MainViewModel : PropertyChangedNotifier
 
     public int SelectedWorkspaceIndex
     {
-        get => model.SelectedWorkspaceIndex;
+        get => settings.SelectedWorkspaceIndex;
         set => ChangeSelectedWorkspaceIndex(value);
     }
 
@@ -146,7 +146,7 @@ internal class MainViewModel : PropertyChangedNotifier
             && e.NewItems != null && e.NewItems.Count == 1
             && e.NewItems[0] is WorkspaceViewModel newWorkspace)
         {
-            model.Workspaces.Add(newWorkspace.Model);
+            settings.Workspaces.Add(newWorkspace.Settings);
             return;
         }
 
@@ -154,18 +154,18 @@ internal class MainViewModel : PropertyChangedNotifier
             && e.OldItems != null && e.OldItems.Count == 1
             && e.OldItems[0] is WorkspaceViewModel oldWorkspace)
         {
-            model.Workspaces.Remove(oldWorkspace.Model);
+            settings.Workspaces.Remove(oldWorkspace.Settings);
             return;
         }
     }
 
     private void ChangeSelectedWorkspaceIndex(int newIndex)
     {
-        previousWorkspaceIndex = model.SelectedWorkspaceIndex;
+        previousWorkspaceIndex = settings.SelectedWorkspaceIndex;
         if (newIndex == previousWorkspaceIndex)
             return;
 
-        model.SelectedWorkspaceIndex = newIndex;
+        settings.SelectedWorkspaceIndex = newIndex;
         RaisePropertyChanged(nameof(SelectedWorkspaceIndex));
 
         if (newIndex >= 0)

@@ -30,39 +30,39 @@ namespace SmartLogViewer.ViewModels;
 internal class WorkspaceViewModel : PropertyChangedNotifier
 {
     private static readonly SmartLogger Log = new();
-    private readonly WorkspaceSettings model;
+    private readonly WorkspaceSettings settings;
 
-    public WorkspaceViewModel(WorkspaceSettings model)
+    public WorkspaceViewModel(WorkspaceSettings settings)
     {
-        this.model = model;
+        this.settings = settings;
 
-        foreach (var file in model.Files)
+        foreach (var file in settings.Files)
             Files.Add(file);
 
         Files.CollectionChanged += FilesCollectionChanged;
     }
 
-    public static implicit operator WorkspaceViewModel(WorkspaceSettings model) => new(model);
+    public static implicit operator WorkspaceViewModel(WorkspaceSettings settings) => new(settings);
 
     public override string ToString()
     {
-        return $"{model}";
+        return $"{settings}";
     }
 
-    public WorkspaceSettings Model => model;
+    public WorkspaceSettings Settings => settings;
 
     public string Name
     {
-        get => model.Name;
-        set => Checkset(ref model.Name, value);
+        get => settings.Name;
+        set => Checkset(ref settings.Name, value);
     }
 
     public ObservableCollection<string> Files { get; set; } = [];
 
     public int SelectedFileIndex
     {
-        get => model.SelectedFileIndex;
-        set => Checkset(ref model.SelectedFileIndex, value);
+        get => settings.SelectedFileIndex;
+        set => Checkset(ref settings.SelectedFileIndex, value);
     }
 
     public void DoOpenFile()
@@ -118,7 +118,7 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
             && e.NewItems != null && e.NewItems.Count == 1
             && e.NewItems[0] is string newFileName)
         {
-            model.Files.Add(newFileName);
+            settings.Files.Add(newFileName);
             return;
         }
 
@@ -126,7 +126,7 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
             && e.OldItems != null && e.OldItems.Count == 1
             && e.OldItems[0] is string oldFileName)
         {
-            model.Files.Remove(oldFileName);
+            settings.Files.Remove(oldFileName);
             return;
         }
     }

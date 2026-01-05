@@ -15,19 +15,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using SmartLogViewer.Settings;
-using SmartLogViewer.ViewModels.Basics;
+namespace SmartLogViewer.Settings;
 
-namespace SmartLogViewer.ViewModels;
-
-internal class ReaderViewModel : PropertyChangedNotifier
+internal class LogReaderSettings
 {
-    private readonly ReaderSettings model;
-
-    public ReaderViewModel(ReaderSettings model)
-    {
-        this.model = model;
-    }
-
-    public static implicit operator ReaderViewModel(ReaderSettings model) => new(model);
+    public string FileName = "";
 }
