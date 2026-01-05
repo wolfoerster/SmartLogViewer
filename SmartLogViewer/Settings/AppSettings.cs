@@ -15,20 +15,15 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Collections.Generic;
+using SmartLogging;
 
-namespace SmartLogViewer.Models;
+namespace SmartLogViewer.Settings;
 
-internal class WorkspaceSettings
+internal class AppSettings
 {
-    public string Name = "";
+    public LocationSettings Location;
 
-    public List<string> Files = [];
+    public int ThemeModeIndex;
 
-    public int SelectedFileIndex = -1;
-
-    public override string ToString()
-    {
-        return $"{Name}, {Files.Count}, {SelectedFileIndex}";
-    }
+    public LogLevel LogLevel = LogLevel.Information;
 }

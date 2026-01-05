@@ -23,7 +23,7 @@ using System.Windows;
 using System.Windows.Controls;
 using SmartLogging;
 using SmartLogViewer.Helper;
-using SmartLogViewer.Models;
+using SmartLogViewer.Settings;
 
 namespace SmartLogViewer;
 

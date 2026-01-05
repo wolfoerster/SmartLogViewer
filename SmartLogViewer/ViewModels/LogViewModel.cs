@@ -16,7 +16,7 @@
 //******************************************************************************************
 
 using SmartLogging;
-using SmartLogViewer.Models;
+using SmartLogViewer.Settings;
 using SmartLogViewer.ViewModels.Basics;
 
 namespace SmartLogViewer.ViewModels;

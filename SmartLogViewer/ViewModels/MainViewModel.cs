@@ -23,7 +23,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using SmartLogging;
 using SmartLogViewer.Helper;
-using SmartLogViewer.Models;
+using SmartLogViewer.Settings;
 using SmartLogViewer.ViewModels.Basics;
 using static SmartLogViewer.Common.Utils;
 using static SmartLogViewer.Helper.Utils;

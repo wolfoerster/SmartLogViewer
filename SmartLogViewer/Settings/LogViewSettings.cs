@@ -15,17 +15,9 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-using System.Collections.Generic;
+namespace SmartLogViewer.Settings;
 
-namespace SmartLogViewer.Models;
-
-internal class MainSettings
+internal class LogViewSettings
 {
-    public int ReadModeIndex;
-
-    public int LogLevelIndex;
-
-    public List<WorkspaceSettings> Workspaces = [];
-
-    public int SelectedWorkspaceIndex;
+    public LocationSettings Location;
 }

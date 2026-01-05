@@ -21,7 +21,7 @@ using System.IO;
 using Microsoft.Win32;
 using SmartLogging;
 using SmartLogViewer.Core;
-using SmartLogViewer.Models;
+using SmartLogViewer.Settings;
 using SmartLogViewer.ViewModels.Basics;
 using static System.IO.Path;
 

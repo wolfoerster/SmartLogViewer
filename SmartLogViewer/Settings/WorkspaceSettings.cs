@@ -15,9 +15,20 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
-namespace SmartLogViewer.Models;
+using System.Collections.Generic;
 
-internal class LogViewSettings
+namespace SmartLogViewer.Settings;
+
+internal class WorkspaceSettings
 {
-    public LocationSettings Location;
+    public string Name = "";
+
+    public List<string> Files = [];
+
+    public int SelectedFileIndex = -1;
+
+    public override string ToString()
+    {
+        return $"{Name}, {Files.Count}, {SelectedFileIndex}";
+    }
 }
