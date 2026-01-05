@@ -17,7 +17,7 @@
 
 namespace SmartLogViewer.Models;
 
-internal struct WindowLocation
+internal struct LocationSettings
 {
     public double Left;
 

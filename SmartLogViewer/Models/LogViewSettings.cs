@@ -19,5 +19,5 @@ namespace SmartLogViewer.Models;
 
 internal class LogViewSettings
 {
-    public WindowLocation Location;
+    public LocationSettings Location;
 }

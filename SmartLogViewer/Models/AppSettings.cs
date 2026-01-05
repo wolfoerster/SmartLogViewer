@@ -21,7 +21,7 @@ namespace SmartLogViewer.Models;
 
 internal class AppSettings
 {
-    public WindowLocation Location;
+    public LocationSettings Location;
 
     public int ThemeModeIndex;
 
