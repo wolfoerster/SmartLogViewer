@@ -99,7 +99,7 @@ internal class MainViewModel : PropertyChangedNotifier
 
     public static RoutedUICommand CreateWorkspace => Commands.CreateWorkspace;
 
-    public static RoutedUICommand RemoveWorkspace => Commands.RemoveWorkspace;
+    public static RoutedUICommand DeleteWorkspace => Commands.DeleteWorkspace;
 
     public static RoutedUICommand OpenFile => Commands.OpenFile;
 
@@ -133,7 +133,7 @@ internal class MainViewModel : PropertyChangedNotifier
         SelectedWorkspaceIndex = Workspaces.Count - 1;
     }
 
-    public void DoRemoveWorkspace()
+    public void DoDeleteWorkspace()
     {
         var newIndex = Math.Max(0, SelectedWorkspaceIndex - 1);
         Workspaces.RemoveAt(SelectedWorkspaceIndex);

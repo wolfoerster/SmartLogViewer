@@ -26,8 +26,8 @@ internal static class Commands
     public static RoutedUICommand CreateWorkspace =
         CreateCommand("Create", "Create workspace (Ctrl+W)", Key.W, ModifierKeys.Control, "Ctrl+W");
 
-    public static RoutedUICommand RemoveWorkspace = 
-        CreateCommand("Remove", "Remove workspace (Ctrl+R)", Key.R, ModifierKeys.Control, "Ctrl+R");
+    public static RoutedUICommand DeleteWorkspace = 
+        CreateCommand("Delete", "Delete workspace (Ctrl+D)", Key.R, ModifierKeys.Control, "Ctrl+D");
 
     public static RoutedUICommand OpenFile =
         CreateCommand("Open", "Open file (Ctrl+O)", Key.O, ModifierKeys.Control, "Ctrl+O");

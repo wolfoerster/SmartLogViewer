@@ -42,14 +42,14 @@ public partial class MainControl : UserControl
         ViewModel.DoCreateWorkspace();
     }
 
-    public void CanRemoveWorkspace(object sender, CanExecuteRoutedEventArgs e)
+    public void CanDeleteWorkspace(object sender, CanExecuteRoutedEventArgs e)
     {
         e.CanExecute = ViewModel.Workspaces.Count > 1;
     }
 
-    public void DoRemoveWorkspace(object sender, ExecutedRoutedEventArgs e)
+    public void DoDeleteWorkspace(object sender, ExecutedRoutedEventArgs e)
     {
-        ViewModel.DoRemoveWorkspace();
+        ViewModel.DoDeleteWorkspace();
     }
 
     private void DoOpenFile(object sender, ExecutedRoutedEventArgs e)
