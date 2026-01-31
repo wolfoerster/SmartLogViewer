@@ -87,12 +87,11 @@ public partial class App : Application
 
     internal static void UpdateThemeMode()
     {
-        //var msg = "You have to restart the application!\r\n\r\nRestart now?";
-        //var res = MessageBox.Show(msg, "Switching Theme", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        //if (res == MessageBoxResult.Yes)
+        var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+        var starter = Path.Combine(dir, "Starter.exe");
+
+        if (File.Exists(starter))
         {
-            var dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
-            var starter = Path.Combine(dir, "Starter.exe");
             using var process = new Process();
             process.StartInfo.FileName = starter;
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -100,7 +99,13 @@ public partial class App : Application
             process.Start();
 
             Application.Current.Shutdown();
+            return;
         }
+
+        var msg = "You have to restart the application!\r\n\r\nRestart now?";
+        var res = MessageBox.Show(msg, "Switching Theme", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (res == MessageBoxResult.Yes)
+            Application.Current.Shutdown();
     }
 
     internal static Version Version { get; }
