@@ -63,11 +63,11 @@
           <Button Command="{Binding CloseFile}" Content="{Binding CloseFile.Name}" ToolTip="{Binding CloseFile.Text}" Margin="4,0,0,0"/>
         </StackPanel>
         <ListView Grid.Row="1" Margin="0,4,0,0" SelectionMode="Single"
-          ItemsSource="{Binding SelectedWorkspace.Files}" 
-          SelectedIndex="{Binding SelectedWorkspace.SelectedFileIndex}">
+          ItemsSource="{Binding SelectedWorkspace.Readers}" 
+          SelectedIndex="{Binding SelectedWorkspace.SelectedReaderIndex}">
           <ListView.ItemTemplate>
             <DataTemplate>
-              <TextBlock Text="{Binding}"/>
+              <TextBlock Text="{Binding FileName}"/>
             </DataTemplate>
           </ListView.ItemTemplate>
         </ListView>

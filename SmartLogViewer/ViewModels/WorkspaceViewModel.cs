@@ -15,9 +15,11 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 //******************************************************************************************
 
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 using Microsoft.Win32;
 using SmartLogging;
 using SmartLogViewer.Core;
@@ -36,10 +38,10 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
     {
         this.settings = settings;
 
-        foreach (var file in settings.Files)
-            Files.Add(file);
+        foreach (var reader in settings.Readers)
+            Readers.Add(reader);
 
-        Files.CollectionChanged += FilesCollectionChanged;
+        Readers.CollectionChanged += ReadersCollectionChanged;
     }
 
     public static implicit operator WorkspaceViewModel(WorkspaceSettings settings) => new(settings);
@@ -57,21 +59,21 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
         set => Checkset(ref settings.Name, value);
     }
 
-    public ObservableCollection<string> Files { get; set; } = [];
+    public ObservableCollection<LogReaderViewModel> Readers { get; set; } = [];
 
-    public int SelectedFileIndex
+    public int SelectedReaderIndex
     {
-        get => settings.SelectedFileIndex;
-        set => Checkset(ref settings.SelectedFileIndex, value);
+        get => settings.SelectedReaderIndex;
+        set => Checkset(ref settings.SelectedReaderIndex, value);
     }
 
     public void DoOpenFile()
     {
         var initialDir = GetTempPath();
 
-        if (Files.Count > 0)
+        if (Readers.Count > 0)
         {
-            var directory = GetDirectoryName(Files[^1]);
+            var directory = GetDirectoryName(Readers[^1].FileName);
             if (directory != null)
                 initialDir = directory;
         }
@@ -89,7 +91,7 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
 
     public void DoCloseFile()
     {
-        Files.RemoveAt(SelectedFileIndex);
+        Readers.RemoveAt(SelectedReaderIndex);
     }
 
     private void OpenFile(string fileName)
@@ -100,34 +102,43 @@ internal class WorkspaceViewModel : PropertyChangedNotifier
             return;
         }
 
-        if (Files.Contains(fileName))
+        var reader = Readers.FirstOrDefault(x => x.FileName == fileName);
+        if (reader != null)
         {
             Log.Information($"File '{fileName}' already open");
             return;
         }
 
-        Files.Add(fileName);
+        CreateReader(fileName);
         Log.Information($"File '{fileName}' opened");
-        SelectedFileIndex = Files.Count - 1;
+        SelectedReaderIndex = Readers.Count - 1;
         LogViewManager.Add(fileName);
     }
 
-    private void FilesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void ReadersCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == NotifyCollectionChangedAction.Add
             && e.NewItems != null && e.NewItems.Count == 1
-            && e.NewItems[0] is string newFileName)
+            && e.NewItems[0] is LogReaderViewModel newReader)
         {
-            settings.Files.Add(newFileName);
+            var readerSettings = new LogReaderSettings { FileName = newReader.FileName };
+            settings.Readers.Add(readerSettings);
             return;
         }
 
         if (e.Action == NotifyCollectionChangedAction.Remove
             && e.OldItems != null && e.OldItems.Count == 1
-            && e.OldItems[0] is string oldFileName)
+            && e.OldItems[0] is LogReaderViewModel oldReader)
         {
-            settings.Files.Remove(oldFileName);
+            settings.Readers.RemoveAll(x => x.FileName == oldReader.FileName);
             return;
         }
+    }
+
+    private void CreateReader(string fileName)
+    {
+        var settings = new LogReaderSettings { FileName = fileName };
+        var viewModel = new LogReaderViewModel(settings);
+        Readers.Add(viewModel);
     }
 }

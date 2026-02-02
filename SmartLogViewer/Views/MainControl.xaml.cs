@@ -59,7 +59,7 @@ public partial class MainControl : UserControl
 
     public void CanCloseFile(object sender, CanExecuteRoutedEventArgs e)
     {
-        e.CanExecute = ViewModel.SelectedWorkspace.SelectedFileIndex >= 0;
+        e.CanExecute = ViewModel.SelectedWorkspace.SelectedReaderIndex >= 0;
     }
 
     private void DoCloseFile(object sender, ExecutedRoutedEventArgs e)

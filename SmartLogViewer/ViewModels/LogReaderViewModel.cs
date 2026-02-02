@@ -30,4 +30,10 @@ internal class LogReaderViewModel : PropertyChangedNotifier
     }
 
     public static implicit operator LogReaderViewModel(LogReaderSettings settings) => new(settings);
+
+    public string FileName
+    {
+        get => settings.FileName;
+        set => Checkset(ref settings.FileName, value);
+    }
 }

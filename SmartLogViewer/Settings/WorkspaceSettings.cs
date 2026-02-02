@@ -23,12 +23,12 @@ internal class WorkspaceSettings
 {
     public string Name = "";
 
-    public List<string> Files = [];
+    public List<LogReaderSettings> Readers = [];
 
-    public int SelectedFileIndex = -1;
+    public int SelectedReaderIndex = -1;
 
     public override string ToString()
     {
-        return $"{Name}, {Files.Count}, {SelectedFileIndex}";
+        return $"{Name}, {Readers.Count}, {SelectedReaderIndex}";
     }
 }
